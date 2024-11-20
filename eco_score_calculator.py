@@ -432,7 +432,7 @@ def display_subcategories(category, subcategories, score_map):
         # Display subcategory scores
         st.markdown(
             f"""
-            <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">
+            <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #8B0000;">
                 {subcategory} (Score: {subcategory_letter_score}, Numeric: {subcategory_numeric_score:.2f})
             </div>
             """,
@@ -481,8 +481,12 @@ if st.button("Calculate Eco-Score"):
         display_score_layout(category, category_numeric_score, category_letter_score, is_category=True)
 
     # Button to toggle subcategory visibility
-    if st.button("Show more details"):
-        toggle_subcategories()
+    if st.session_state["show_subcategories"]:
+        if st.button("Hide details"):
+            toggle_subcategories()
+    else:
+        if st.button("Show more details"):
+            toggle_subcategories()
 
     # Display subcategories if toggled
     if st.session_state["show_subcategories"]:
