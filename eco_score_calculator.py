@@ -415,60 +415,15 @@ def display_subcategory_layout(category, subcategories, score_map):
         subcategory_color = get_score_color(subcategory_letter_score)
 
         # Subcategory header
-        col1, col2, col3 = st.columns([3, 1, 1], gap="small")
-        with col1:
-            st.markdown(
-                f"""
-                <div style="font-size: 20px; font-weight: bold; margin-bottom: 10px;">
-                    {subcategory}
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-        with col2:
-            st.markdown(
-                f"""
-                <div style="background-color: #E0E0E0; padding: 10px; border-radius: 5px; text-align: center;">
-                    <span style="font-size: 18px; font-weight: bold;">{subcategory_numeric_score:.2f}</span>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-        with col3:
-            st.markdown(
-                f"""
-                <div style="background-color: {subcategory_color}; padding: 10px; border-radius: 5px; text-align: center; color: white;">
-                    <span style="font-size: 18px; font-weight: bold;">{subcategory_letter_score}</span>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-        # Toggle for detailed group view
-        show_details = st.checkbox(f"Show details for {subcategory}", key=f"{category}_{subcategory}_details")
-
-        if show_details:
+        with st.expander(f"{subcategory} (Score: {subcategory_letter_score}, Numeric: {subcategory_numeric_score:.2f})", expanded=False):
+            # Group-level details inside the expander
             for group, letter_score in groups.items():
                 group_color = get_score_color(letter_score)
                 col1, col2, col3 = st.columns([3, 1, 1], gap="small")
                 with col1:
-                    st.markdown(
-                        f"""
-                        <div style="font-size: 16px; margin-top: 5px;">
-                            {group}
-                        </div>
-                        """,
-                        unsafe_allow_html=True,
-                    )
+                    st.markdown(f"**Group: {group}**")
                 with col2:
-                    st.markdown(
-                        f"""
-                        <div style="font-size: 16px; margin-top: 5px;">
-                            {selected_options[category][subcategory][group]}
-                        </div>
-                        """,
-                        unsafe_allow_html=True,
-                    )
+                    st.markdown(f"**Selected Option: {selected_options[category][subcategory][group]}**")
                 with col3:
                     st.markdown(
                         f"""
@@ -478,7 +433,7 @@ def display_subcategory_layout(category, subcategories, score_map):
                         """,
                         unsafe_allow_html=True,
                     )
-      
+
 # Streamlit UI
 
 # App title
