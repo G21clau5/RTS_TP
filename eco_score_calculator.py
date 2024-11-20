@@ -358,7 +358,7 @@ for category, subcategories in eco_data.items():
                 options=list(options.keys()),
                 key=f"{category}_{subcategory}_{group}",
             )
-            selected_options[category][subcategory][group] = options[selected_option]
+            selected_options[category][subcategory][group] = selected_option
 
 # Unified function to display results in a layout
 def display_score_layout(label, numeric_score, letter_score, is_category=False):
