@@ -471,7 +471,6 @@ if st.button("Calculate Eco-Score"):
             st.markdown(f"**Score: {score_letter}**")
 
         # Use st.expander for subcategory details
-        with st.expander(f"Details for {category}", expanded=False):
-            display_subcategory_layout(category, subcategories, score_map)
+        display_subcategory_layout(category, subcategories, score_map)
 
         st.markdown("<hr>", unsafe_allow_html=True)  # Separator
