@@ -43,7 +43,7 @@ inject_custom_css()
 # Add an image and a title at the top
 st.image("https://cdn.unitycms.io/images/2lnv07LWaRb8rdPxOqTKwI.jpg?op=ocroped&val=1200,630,1000,1000,0,0&sum=0ZCX2CRVbos", use_column_width=True)  # Replace "your_image.png" with the path to your image
 
-#st.title("Eco-Score Calculator")
+st.title("Eco-Score Calculator")
 
 # Eco-score data structure
 eco_data = {
