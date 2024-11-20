@@ -410,11 +410,7 @@ def display_score_layout(label, numeric_score, letter_score, is_category=False):
 if "show_subcategories" not in st.session_state:
     st.session_state["show_subcategories"] = False
 
-# Function to toggle visibility of subcategories
-def toggle_subcategories():
-    st.session_state["show_subcategories"] = not st.session_state["show_subcategories"]
-
-# Function to display subcategories with their numeric scores and letter scores
+# Function to compute and display subcategories
 def display_subcategories(category, subcategories, score_map):
     for subcategory, groups in subcategories.items():
         # Calculate subcategory average score
@@ -479,18 +475,14 @@ if st.button("Calculate Eco-Score"):
 
         # Display category score in smaller boxes
         display_score_layout(category, category_numeric_score, category_letter_score, is_category=True)
-
-    # Button to toggle subcategory visibility
-    if st.session_state["show_subcategories"]:
-        if st.button("Hide details"):
-            toggle_subcategories()
-    else:
-        if st.button("Show more details"):
-            toggle_subcategories()
+    
+    st.markdown("<hr>", unsafe_allow_html=True)
+    
+    # Button to toggle visibility of subcategories
+    if st.button("Show more details" if not st.session_state["show_subcategories"] else "Hide details"):
+        st.session_state["show_subcategories"] = not st.session_state["show_subcategories"]
 
     # Display subcategories if toggled
     if st.session_state["show_subcategories"]:
         for category, subcategories in selected_options.items():
             display_subcategories(category, subcategories, score_map)
-
-    st.markdown("<hr>", unsafe_allow_html=True)  # Separator
