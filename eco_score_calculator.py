@@ -358,8 +358,11 @@ for category, subcategories in eco_data.items():
                 options=list(options.keys()),
                 key=f"{category}_{subcategory}_{group}",
             )
-            selected_options[category][subcategory][group] = selected_option
-
+            # Store the descriptive name and retrieve the score dynamically when needed
+            selected_options[category][subcategory][group] = {
+                "option": selected_option,  # Descriptive name
+                "score": options[selected_option],  # Corresponding score (letter grade)
+            }
 # Unified function to display results in a layout
 def display_score_layout(label, numeric_score, letter_score, is_category=False):
     score_color = get_score_color(letter_score)
