@@ -477,14 +477,6 @@ def display_subcategories(category, subcategories, score_map):
         st.markdown("</div>", unsafe_allow_html=True)  # Close the indentation block
 
 # Main display logic
-# Centered Streamlit Button
-st.markdown(
-    """
-    <div style="display: flex; justify-content: center; margin: 20px;">
-    """,
-    unsafe_allow_html=True,
-)
-
 if st.button("Calculate Eco-Score"):
     # Compute category and overall scores
     category_scores, overall_numeric_score = compute_score(selected_options)
