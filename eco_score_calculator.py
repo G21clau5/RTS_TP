@@ -446,6 +446,9 @@ def display_subcategories(category, subcategories, score_map):
             # Fetch the selected option explicitly
             selected_option = selected_options.get(category, {}).get(subcategory, {}).get(group, "No selection")
 
+             # Debug: Display the selected option being fetched
+            st.write(f"Debug: Category={category}, Subcategory={subcategory}, Group={group}, Selected Option={selected_option}")
+
             # Display each group's details in a row
             col1, col2, col3 = st.columns([3, 2, 1], gap="small")
             with col1:
