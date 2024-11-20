@@ -410,6 +410,10 @@ def display_score_layout(label, numeric_score, letter_score, is_category=False):
 if "show_subcategories" not in st.session_state:
     st.session_state["show_subcategories"] = False
 
+# Function to toggle subcategories state
+def toggle_subcategories():
+    st.session_state["show_subcategories"] = not st.session_state["show_subcategories"]
+
 # Function to compute and display subcategories
 def display_subcategories(category, subcategories, score_map):
     for subcategory, groups in subcategories.items():
@@ -478,11 +482,17 @@ if st.button("Calculate Eco-Score"):
     
     st.markdown("<hr>", unsafe_allow_html=True)
     
-    # Button to toggle visibility of subcategories
-    if st.button("Show more details" if not st.session_state["show_subcategories"] else "Hide details"):
-        st.session_state["show_subcategories"] = not st.session_state["show_subcategories"]
+    # Add the "Show more details" toggle button
+    if st.session_state["show_subcategories"]:
+        if st.button("Hide details"):
+            toggle_subcategories()
+    else:
+        if st.button("Show more details"):
+            toggle_subcategories()
 
     # Display subcategories if toggled
     if st.session_state["show_subcategories"]:
         for category, subcategories in selected_options.items():
             display_subcategories(category, subcategories, score_map)
+
+    st.markdown("<hr>", unsafe_allow_html=True)
