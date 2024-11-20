@@ -437,7 +437,12 @@ def display_subcategory_layout(category, subcategories, score_map):
 # Streamlit UI
 
 # App title
-st.title("Eco-Score Calculator")
+#st.title("Eco-Score Calculator")
+
+st.title("Expander Test")
+
+with st.expander("Click to expand"):
+    st.write("If you can see this, the expander works!")
 
 # Display the results section
 if st.button("Calculate Eco-Score"):
@@ -478,7 +483,6 @@ if st.button("Calculate Eco-Score"):
         )
 
         if show_category_details:
-            # Display subcategories
             # Display subcategories
             display_subcategory_layout(category, subcategories, score_map)
         st.markdown("<hr>", unsafe_allow_html=True)  # Separator
