@@ -431,27 +431,34 @@ def display_subcategories(category, subcategories, score_map):
             unsafe_allow_html=True,
         )
 
-        # Nested expander for group details inside the subcategory
-        with st.expander(f"Show details for {subcategory}", expanded=False):
-            for group, letter_score in groups.items():
-                group_color = get_score_color(letter_score)
-                selected_option = selected_options[category][subcategory][group]
+        # Display group details indented to the right
+        st.markdown(
+            """
+            <div style="margin-left: 30px;">
+            """,
+            unsafe_allow_html=True,
+        )
 
-                # Display group details
-                col1, col2, col3 = st.columns([3, 2, 1], gap="small")
-                with col1:
-                    st.markdown(f"**{group}**")  # Group name
-                with col2:
-                    st.markdown(f"**{selected_option}**")  # Selected option
-                with col3:
-                    st.markdown(
-                        f"""
-                        <div style="background-color: {group_color}; padding: 5px; border-radius: 5px; text-align: center; color: white;">
-                            <span style="font-size: 14px;">{letter_score}</span>
-                        </div>
-                        """,
-                        unsafe_allow_html=True,
-                    )
+        for group, letter_score in groups.items():
+            group_color = get_score_color(letter_score)
+            selected_option = selected_options[category][subcategory][group]
+
+            # Display each group's details in a row
+            col1, col2, col3 = st.columns([3, 2, 1], gap="small")
+            with col1:
+                st.markdown(f"**{group}**")  # Group name
+            with col2:
+                st.markdown(f"**{selected_option}**")  # Selected option
+            with col3:
+                st.markdown(
+                    f"""
+                    <div style="background-color: {group_color}; padding: 5px; border-radius: 5px; text-align: center; color: white;">
+                        <span style="font-size: 14px;">{letter_score}</span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+        st.markdown("</div>", unsafe_allow_html=True)  # Close the indentation block
 
 # Main display logic
 if st.button("Calculate Eco-Score"):
@@ -473,7 +480,7 @@ if st.button("Calculate Eco-Score"):
         display_score_layout(category, category_numeric_score, category_letter_score, is_category=True)
 
         # Expander for subcategories within this category
-        with st.expander(f"Show subcategories for {category}", expanded=False):
+        with st.expander(f"Show details for {category}", expanded=False):
             display_subcategories(category, subcategories, score_map)
 
     st.markdown("<hr>", unsafe_allow_html=True)
