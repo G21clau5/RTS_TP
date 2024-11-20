@@ -123,7 +123,7 @@ eco_data = {
                 "Indirect emissions, measured externally": "D",
             },
         },
-        "Offices (trucks in our case)": {
+        "Offices": {
             "Source": {
                 "Offices: Heat demand (generic)": "D",
                 "Offices: Electricity demand (generic)": "C",
@@ -442,6 +442,9 @@ def display_subcategories(category, subcategories, score_map):
         for group, letter_score in groups.items():
             group_color = get_score_color(letter_score)
             selected_option = selected_options[category][subcategory][group]
+
+            # Fetch the selected option explicitly
+            selected_option = selected_options.get(category, {}).get(subcategory, {}).get(group, "No selection")
 
             # Display each group's details in a row
             col1, col2, col3 = st.columns([3, 2, 1], gap="small")
