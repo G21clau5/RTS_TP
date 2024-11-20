@@ -406,8 +406,16 @@ def display_score_layout(label, numeric_score, letter_score, is_category=False):
         )
 
 
-# Function to display subcategory scores with toggled group details
-def display_subcategory_layout(category, subcategories, score_map):
+# Initialize session state for toggling subcategory visibility
+if "show_subcategories" not in st.session_state:
+    st.session_state["show_subcategories"] = False
+
+# Function to toggle visibility of subcategories
+def toggle_subcategories():
+    st.session_state["show_subcategories"] = not st.session_state["show_subcategories"]
+
+# Function to display subcategories with their numeric scores and letter scores
+def display_subcategories(category, subcategories, score_map):
     for subcategory, groups in subcategories.items():
         # Calculate subcategory average score
         subcategory_total = 0
@@ -421,28 +429,28 @@ def display_subcategory_layout(category, subcategories, score_map):
         subcategory_letter_score = numeric_to_letter(subcategory_numeric_score)
         subcategory_color = get_score_color(subcategory_letter_score)
 
-        # Subcategory header
+        # Display subcategory scores
         st.markdown(
             f"""
-            <div style="font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #8B0000;">
+            <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">
                 {subcategory} (Score: {subcategory_letter_score}, Numeric: {subcategory_numeric_score:.2f})
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-        # Expander for showing all group details
+        # Expander for group details inside the subcategory
         with st.expander("Show more details", expanded=False):
             for group, letter_score in groups.items():
                 group_color = get_score_color(letter_score)
                 selected_option = selected_options[category][subcategory][group]
 
-                # Display group name, option chosen, and letter score in a single row
+                # Display group details
                 col1, col2, col3 = st.columns([3, 2, 1], gap="small")
                 with col1:
-                    st.markdown(f"**{group}**")  # Display group name without "Group"
+                    st.markdown(f"**{group}**")
                 with col2:
-                    st.markdown(f"**{selected_option}**")  # Display the name of the option chosen
+                    st.markdown(f"**{selected_option}**")
                 with col3:
                     st.markdown(
                         f"""
@@ -453,7 +461,7 @@ def display_subcategory_layout(category, subcategories, score_map):
                         unsafe_allow_html=True,
                     )
 
-# Display the results section
+# Main display logic
 if st.button("Calculate Eco-Score"):
     # Compute category and overall scores
     category_scores, overall_numeric_score = compute_score(selected_options)
@@ -472,7 +480,13 @@ if st.button("Calculate Eco-Score"):
         # Display category score in smaller boxes
         display_score_layout(category, category_numeric_score, category_letter_score, is_category=True)
 
-        # Display subcategory details with expanders
-        display_subcategory_layout(category, subcategories, score_map)
+    # Button to toggle subcategory visibility
+    if st.button("Show more details"):
+        toggle_subcategories()
+
+    # Display subcategories if toggled
+    if st.session_state["show_subcategories"]:
+        for category, subcategories in selected_options.items():
+            display_subcategories(category, subcategories, score_map)
 
     st.markdown("<hr>", unsafe_allow_html=True)  # Separator
