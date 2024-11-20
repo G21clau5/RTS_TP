@@ -406,15 +406,7 @@ def display_score_layout(label, numeric_score, letter_score, is_category=False):
         )
 
 
-# Initialize session state for toggling subcategory visibility
-if "show_subcategories" not in st.session_state:
-    st.session_state["show_subcategories"] = False
-
-# Function to toggle subcategories state
-def toggle_subcategories():
-    st.session_state["show_subcategories"] = not st.session_state["show_subcategories"]
-
-# Function to compute and display subcategories
+# Function to display subcategories with their numeric scores and letter scores
 def display_subcategories(category, subcategories, score_map):
     for subcategory, groups in subcategories.items():
         # Calculate subcategory average score
@@ -429,7 +421,7 @@ def display_subcategories(category, subcategories, score_map):
         subcategory_letter_score = numeric_to_letter(subcategory_numeric_score)
         subcategory_color = get_score_color(subcategory_letter_score)
 
-        # Display subcategory scores
+        # Display subcategory header with score
         st.markdown(
             f"""
             <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #8B0000;">
@@ -439,8 +431,8 @@ def display_subcategories(category, subcategories, score_map):
             unsafe_allow_html=True,
         )
 
-        # Expander for group details inside the subcategory
-        with st.expander("Show more details", expanded=False):
+        # Nested expander for group details inside the subcategory
+        with st.expander(f"Show details for {subcategory}", expanded=False):
             for group, letter_score in groups.items():
                 group_color = get_score_color(letter_score)
                 selected_option = selected_options[category][subcategory][group]
@@ -448,9 +440,9 @@ def display_subcategories(category, subcategories, score_map):
                 # Display group details
                 col1, col2, col3 = st.columns([3, 2, 1], gap="small")
                 with col1:
-                    st.markdown(f"**{group}**")
+                    st.markdown(f"**{group}**")  # Group name
                 with col2:
-                    st.markdown(f"**{selected_option}**")
+                    st.markdown(f"**{selected_option}**")  # Selected option
                 with col3:
                     st.markdown(
                         f"""
@@ -479,20 +471,9 @@ if st.button("Calculate Eco-Score"):
 
         # Display category score in smaller boxes
         display_score_layout(category, category_numeric_score, category_letter_score, is_category=True)
-    
-    st.markdown("<hr>", unsafe_allow_html=True)
-    
-    # Add the "Show more details" toggle button
-    if st.session_state["show_subcategories"]:
-        if st.button("Hide details"):
-            toggle_subcategories()
-    else:
-        if st.button("Show more details"):
-            toggle_subcategories()
 
-    # Display subcategories if toggled
-    if st.session_state["show_subcategories"]:
-        for category, subcategories in selected_options.items():
+        # Expander for subcategories within this category
+        with st.expander(f"Show subcategories for {category}", expanded=False):
             display_subcategories(category, subcategories, score_map)
 
     st.markdown("<hr>", unsafe_allow_html=True)
