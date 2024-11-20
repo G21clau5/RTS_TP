@@ -40,8 +40,10 @@ st.set_page_config(page_title="Eco-Score Calculator", page_icon="🌱")
 # Inject custom CSS
 inject_custom_css()
 
-# Add an image at the top
+# Add an image and a title at the top
 st.image("https://cdn.unitycms.io/images/2lnv07LWaRb8rdPxOqTKwI.jpg?op=ocroped&val=1200,630,1000,1000,0,0&sum=0ZCX2CRVbos", use_column_width=True)  # Replace "your_image.png" with the path to your image
+
+#st.title("Eco-Score Calculator")
 
 # Eco-score data structure
 eco_data = {
@@ -436,14 +438,6 @@ def display_subcategory_layout(category, subcategories, score_map):
 
 # Streamlit UI
 
-# App title
-#st.title("Eco-Score Calculator")
-
-st.title("Expander Test")
-
-with st.expander("Click to expand"):
-    st.write("If you can see this, the expander works!")
-
 # Display the results section
 if st.button("Calculate Eco-Score"):
     # Compute category and overall scores
@@ -476,13 +470,8 @@ if st.button("Calculate Eco-Score"):
             score_letter = numeric_to_letter(category_scores[category])
             st.markdown(f"**Score: {score_letter}**")
 
-        # Toggle button for category details
-        show_category_details = st.checkbox(
-            f"Show more details for {category}",
-            key=f"show_category_{category}",
-        )
-
-        if show_category_details:
-            # Display subcategories
+        # Use st.expander for subcategory details
+        with st.expander(f"Details for {category}", expanded=False):
             display_subcategory_layout(category, subcategories, score_map)
+
         st.markdown("<hr>", unsafe_allow_html=True)  # Separator
