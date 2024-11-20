@@ -494,6 +494,7 @@ if st.button("Calculate Eco-Score"):
 
     # Display category scores with subcategory and group details
     for category, subcategories in selected_options.items():
+        # Display category row
         st.markdown(
             f"""
             <div style="background-color: #8B0000; padding: 10px; border-radius: 5px; color: white; font-size: 24px; font-weight: bold; text-align: left; margin-bottom: 10px;">
@@ -502,20 +503,66 @@ if st.button("Calculate Eco-Score"):
             """,
             unsafe_allow_html=True,
         )
-        display_subcategory_layout(category, subcategories, score_map)
+        col1, col2, col3 = st.columns([3, 1, 1])
+        with col1:
+            st.markdown(f"**Category: {category}**")
+        with col2:
+            st.markdown(f"**Numeric Score: {category_scores[category]:.2f}**")
+        with col3:
+            score_letter = numeric_to_letter(category_scores[category])
+            st.markdown(f"**Score: {score_letter}**")
+
+        # Toggle button for category details
+        show_category_details = st.checkbox(
+            f"Show more details for {category}",
+            key=f"show_category_{category}",
+        )
+
+        if show_category_details:
+            # Display subcategories
+            for subcategory, groups in subcategories.items():
+                subcategory_total = 0
+                subcategory_count = 0
+                for group, letter_score in groups.items():
+                    if letter_score and letter_score != "No score":
+                        score_value = score_map.get(letter_score.upper(), 0)
+                        subcategory_total += score_value
+                        subcategory_count += 1
+
+                subcategory_numeric_score = subcategory_total / subcategory_count if subcategory_count > 0 else 0
+                subcategory_letter_score = numeric_to_letter(subcategory_numeric_score)
+
+                col1, col2, col3 = st.columns([3, 1, 1])
+                with col1:
+                    st.markdown(f"**Subcategory: {subcategory}**")
+                with col2:
+                    st.markdown(f"**Numeric Score: {subcategory_numeric_score:.2f}**")
+                with col3:
+                    st.markdown(f"**Score: {subcategory_letter_score}**")
+
+                # Toggle button for subcategory details
+                show_subcategory_details = st.checkbox(
+                    f"Show more details for {subcategory}",
+                    key=f"show_subcategory_{category}_{subcategory}",
+                )
+
+                if show_subcategory_details:
+                    # Display group details
+                    for group, letter_score in groups.items():
+                        group_color = get_score_color(letter_score)
+                        col1, col2, col3 = st.columns([3, 1, 1])
+                        with col1:
+                            st.markdown(f"**Group: {group}**")
+                        with col2:
+                            st.markdown(f"**Selected Option: {selected_options[category][subcategory][group]}**")
+                        with col3:
+                            st.markdown(
+                                f"""
+                                <div style="background-color: {group_color}; padding: 5px; border-radius: 5px; text-align: center; color: white;">
+                                    <span style="font-size: 14px;">{letter_score}</span>
+                                </div>
+                                """,
+                                unsafe_allow_html=True,
+                            )
+
         st.markdown("<hr>", unsafe_allow_html=True)  # Separator
-
-
-    # Display results in the new layout
-    for category, numeric_score in category_scores.items():
-        score = numeric_to_letter(numeric_score)
-        display_results_layout(category, numeric_score, score)
-
-        # Add vertical space between rows
-        st.markdown("<br>", unsafe_allow_html=True)
-
-    # Display overall score
-    overall_score = numeric_to_letter(overall_numeric_score)
-    st.markdown("<hr>", unsafe_allow_html=True)  # Separator
-    st.subheader("Overall Eco-Score")
-    display_results_layout("Overall Eco-Score", overall_numeric_score, overall_score)
