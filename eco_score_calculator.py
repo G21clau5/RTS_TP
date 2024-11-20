@@ -358,126 +358,172 @@ def compute_score(selected_options):
     overall_score = total_score / total_count if total_count > 0 else 0 # The overall score is the average of all individual scores, not the average of averages
     return category_scores, overall_score
 
+# Function to display results in a layout
+def display_results_layout(category, numeric_score, score):
+    score_color = get_score_color(score)
+    neutral_color = "#E0E0E0"  # Neutral color for Category and Numeric Score boxes
+
+    # Streamlit columns to organize layout
+    col1, col2, col3 = st.columns([1, 1, 1], gap="large")  # Adjust the gap between columns
+
+    # Category box
+    with col1:
+        st.markdown(
+            f"""
+            <div style="background-color: {neutral_color}; padding: 20px; border-radius: 5px; text-align: center; margin: 10px 0;">
+                <span style="font-size: 24px; font-weight: bold;">{category}</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    # Numeric score box
+    with col2:
+        st.markdown(
+            f"""
+            <div style="background-color: {neutral_color}; padding: 20px; border-radius: 5px; text-align: center; margin: 10px 0;">
+                <span style="font-size: 24px; font-weight: bold;">{numeric_score:.2f}</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    # Score box (letter)
+    with col3:
+        st.markdown(
+            f"""
+            <div style="background-color: {score_color}; padding: 20px; border-radius: 5px; text-align: center; color: white; margin: 10px 0;">
+                <span style="font-size: 24px; font-weight: bold;">{score}</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+# Function to display subcategory scores with toggled group details
+def display_subcategory_layout(category, subcategories, score_map):
+    for subcategory, groups in subcategories.items():
+        # Calculate subcategory average score
+        subcategory_total = 0
+        subcategory_count = 0
+        for group, letter_score in groups.items():
+            if letter_score and letter_score != "No score":  # Ignore invalid scores
+                score_value = score_map.get(letter_score.upper(), 0)
+                subcategory_total += score_value
+                subcategory_count += 1
+        subcategory_numeric_score = subcategory_total / subcategory_count if subcategory_count > 0 else 0
+        subcategory_letter_score = numeric_to_letter(subcategory_numeric_score)
+        subcategory_color = get_score_color(subcategory_letter_score)
+
+        # Subcategory header
+        col1, col2, col3 = st.columns([3, 1, 1], gap="small")
+        with col1:
+            st.markdown(
+                f"""
+                <div style="font-size: 20px; font-weight: bold; margin-bottom: 10px;">
+                    {subcategory}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        with col2:
+            st.markdown(
+                f"""
+                <div style="background-color: #E0E0E0; padding: 10px; border-radius: 5px; text-align: center;">
+                    <span style="font-size: 18px; font-weight: bold;">{subcategory_numeric_score:.2f}</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        with col3:
+            st.markdown(
+                f"""
+                <div style="background-color: {subcategory_color}; padding: 10px; border-radius: 5px; text-align: center; color: white;">
+                    <span style="font-size: 18px; font-weight: bold;">{subcategory_letter_score}</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        # Toggle for detailed group view
+        show_details = st.checkbox(f"Show details for {subcategory}", key=f"{category}_{subcategory}_details")
+
+        if show_details:
+            for group, letter_score in groups.items():
+                group_color = get_score_color(letter_score)
+                col1, col2, col3 = st.columns([3, 1, 1], gap="small")
+                with col1:
+                    st.markdown(
+                        f"""
+                        <div style="font-size: 16px; margin-top: 5px;">
+                            {group}
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+                with col2:
+                    st.markdown(
+                        f"""
+                        <div style="font-size: 16px; margin-top: 5px;">
+                            {selected_options[category][subcategory][group]}
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+                with col3:
+                    st.markdown(
+                        f"""
+                        <div style="background-color: {group_color}; padding: 5px; border-radius: 5px; text-align: center; color: white;">
+                            <span style="font-size: 14px;">{letter_score}</span>
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
       
 # Streamlit UI
 
 # App title
 st.title("Eco-Score Calculator")
 
-# Display the results with collapsible sections
-def display_results(category_scores, overall_score):
-    overall_letter_score = numeric_to_letter(overall_score)
-    overall_color = get_score_color(overall_letter_score)
+# Display the results section
+if st.button("Calculate Eco-Score"):
+    # Compute category and overall scores
+    category_scores, overall_numeric_score = compute_score(selected_options)
 
-    # Display overall score
-    st.markdown(
-        f"""
-        <div style="text-align: center; margin-bottom: 20px;">
-            <div style="display: inline-block; padding: 20px; border-radius: 10px; background-color: {overall_color}; color: white; font-weight: bold; font-size: 24px;">
-                Overall Eco-Score
-            </div>
-            <div style="display: inline-block; padding: 20px; border-radius: 10px; background-color: #E0E0E0; color: black; font-weight: bold; font-size: 24px; margin-left: 10px;">
-                {overall_score:.2f}
-            </div>
-            <div style="display: inline-block; padding: 20px; border-radius: 10px; background-color: {overall_color}; color: white; font-weight: bold; font-size: 24px; margin-left: 10px;">
-                {overall_letter_score}
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    # Display overall score first
+    overall_score = numeric_to_letter(overall_numeric_score)
+    st.subheader("Overall Eco-Score")
+    display_results_layout("Overall Eco-Score", overall_numeric_score, overall_score)
 
-    # Display category results
-    for category, category_score in category_scores.items():
-        category_letter_score = numeric_to_letter(category_score)
-        category_color = get_score_color(category_letter_score)
+    st.markdown("<hr>", unsafe_allow_html=True)  # Separator
 
-        # Display category header
+    # Display category scores with subcategory and group details
+    for category, subcategories in selected_options.items():
+        # Display category row
         st.markdown(
             f"""
-            <div style="background-color: #8B0000; padding: 10px; border-radius: 5px; color: white; font-size: 24px; font-weight: bold; text-align: left; width: 100%;">
+            <div style="background-color: #8B0000; padding: 10px; border-radius: 5px; color: white; font-size: 24px; font-weight: bold; text-align: left; margin-bottom: 10px;">
                 {category}
             </div>
             """,
             unsafe_allow_html=True,
         )
+        col1, col2, col3 = st.columns([3, 1, 1])
+        with col1:
+            st.markdown(f"**Category: {category}**")
+        with col2:
+            st.markdown(f"**Numeric Score: {category_scores[category]:.2f}**")
+        with col3:
+            score_letter = numeric_to_letter(category_scores[category])
+            st.markdown(f"**Score: {score_letter}**")
 
-        # Display category scores in boxes
-        st.markdown(
-            f"""
-            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-                <div style="flex: 1; text-align: center; background-color: #E0E0E0; padding: 10px; border-radius: 5px; font-weight: bold;">
-                    {category}
-                </div>
-                <div style="flex: 1; text-align: center; background-color: #E0E0E0; padding: 10px; border-radius: 5px; font-weight: bold; margin-left: 10px;">
-                    {category_score:.2f}
-                </div>
-                <div style="flex: 1; text-align: center; background-color: {category_color}; padding: 10px; border-radius: 5px; color: white; font-weight: bold; margin-left: 10px;">
-                    {category_letter_score}
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
+        # Toggle button for category details
+        show_category_details = st.checkbox(
+            f"Show more details for {category}",
+            key=f"show_category_{category}",
         )
 
-        # Add a collapsible section for subcategories
-        with st.expander(f"View Subcategories for {category}"):
-            for subcategory, groups in selected_options[category].items():
-                # Calculate subcategory score
-                subcategory_total = 0
-                subcategory_count = 0
-                for group, letter_score in groups.items():
-                    if letter_score and letter_score != "No score":
-                        score_value = score_map.get(letter_score.upper(), 0)
-                        subcategory_total += score_value
-                        subcategory_count += 1
-                subcategory_score = (
-                    subcategory_total / subcategory_count
-                    if subcategory_count > 0
-                    else 0
-                )
-                subcategory_letter_score = numeric_to_letter(subcategory_score)
-                subcategory_color = get_score_color(subcategory_letter_score)
-
-                # Display subcategory scores
-                st.markdown(
-                    f"""
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <div style="flex: 2; text-align: left; font-weight: bold;">
-                            {subcategory}
-                        </div>
-                        <div style="flex: 1; text-align: center; background-color: #E0E0E0; padding: 5px; border-radius: 5px; font-weight: bold; margin-left: 10px;">
-                            {subcategory_score:.2f}
-                        </div>
-                        <div style="flex: 1; text-align: center; background-color: {subcategory_color}; padding: 5px; border-radius: 5px; color: white; font-weight: bold; margin-left: 10px;">
-                            {subcategory_letter_score}
-                        </div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-                # Add another collapsible section for groups in the subcategory
-                with st.expander(f"View Groups for {subcategory}"):
-                    for group, letter_score in groups.items():
-                        if letter_score:
-                            group_color = get_score_color(letter_score)
-                            st.markdown(
-                                f"""
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                    <div style="flex: 2; text-align: left;">
-                                        {group}
-                                    </div>
-                                    <div style="flex: 1; text-align: center; background-color: {group_color}; padding: 5px; border-radius: 5px; color: white; font-weight: bold; margin-left: 10px;">
-                                        {letter_score}
-                                    </div>
-                                </div>
-                                """,
-                                unsafe_allow_html=True,
-                            )
-
-
-# Add the "Calculate Eco-Score" button
-if st.button("Calculate Eco-Score"):
-    category_scores, overall_score = compute_score(selected_options)
-    display_results(category_scores, overall_score)
+        if show_category_details:
+            # Display subcategories
+            # Display subcategories
+            display_subcategory_layout(category, subcategories, score_map)
+        st.markdown("<hr>", unsafe_allow_html=True)  # Separator
