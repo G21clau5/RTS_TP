@@ -278,6 +278,7 @@ score_map = {"A": 1, "B": 2, "C": 3, "D": 4}
 
 # Function to get color based on score (letter grades)
 def get_score_color(letter_score):
+    # Define colors for valid letter scores
     score_colors = {
         "A": "#4CAF50",         # Green
         "A-": "#8BC34A",        # Light Green
@@ -290,7 +291,13 @@ def get_score_color(letter_score):
         "D+": "#FF5252",        # Light Red
         "D": "#F44336",         # Red
     }
-    return score_colors.get(letter_score, "#9E9E9E")  # Default to gray for invalid scores
+
+    # Handle invalid or missing scores
+    if not letter_score or letter_score == "None" or letter_score == "No score":
+        return "#9E9E9E"  # Gray for invalid or missing scores
+    
+    # Get the corresponding color or default to gray
+    return score_colors.get(letter_score.upper(), "#9E9E9E")  # Default to gray
 
 # Function to convert numeric score to letter score
 def numeric_to_letter(score):
@@ -448,12 +455,9 @@ def display_subcategories(category, subcategories, score_map):
         )
 
         for group, group_data in groups.items():
-            group_color = get_score_color(group_data.get("score", ""))
             selected_option = group_data.get("option", "No selection")
-
-        #for group, letter_score in groups.items():
-            #group_color = get_score_color(letter_score)
-            #selected_option = selected_options[category][subcategory][group]
+            letter_score = group_data.get("score", "No score")
+            group_color = get_score_color(letter_score)
 
             # Display each group's details in a row
             col1, col2, col3 = st.columns([3, 2, 1], gap="small")
