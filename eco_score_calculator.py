@@ -330,7 +330,9 @@ def compute_score(selected_options):
         category_total = 0
         category_count = 0
         for subcategory, groups in subcategories.items():
-            for group, letter_score in groups.items():
+            for group, group_data in groups.items():
+                # Retrieve the score (letter score) for each group
+                letter_score = group_data.get("score", None)
                 if letter_score and letter_score != "No score":  # Ignore "No score" (not considered when computing the mean)
                     score_value = score_map.get(letter_score.upper(), 0)
                     category_total += score_value
@@ -358,6 +360,7 @@ for category, subcategories in eco_data.items():
                 options=list(options.keys()),
                 key=f"{category}_{subcategory}_{group}",
             )
+            #selected_options[category][subcategory][group] = options[selected_option]
             # Store the descriptive name and retrieve the score dynamically when needed
             selected_options[category][subcategory][group] = {
                 "option": selected_option,  # Descriptive name
@@ -415,7 +418,9 @@ def display_subcategories(category, subcategories, score_map):
         # Calculate subcategory average score
         subcategory_total = 0
         subcategory_count = 0
-        for group, letter_score in groups.items():
+        for group, group_data in groups.items():
+            # Retrieve the score safely
+            letter_score = group_data.get("score", None)
             if letter_score and letter_score != "No score":  # Ignore invalid scores
                 score_value = score_map.get(letter_score.upper(), 0)
                 subcategory_total += score_value
@@ -442,15 +447,13 @@ def display_subcategories(category, subcategories, score_map):
             unsafe_allow_html=True,
         )
 
-        for group, letter_score in groups.items():
-            group_color = get_score_color(letter_score)
-            selected_option = selected_options[category][subcategory][group]
+        for group, group_data in groups.items():
+            group_color = get_score_color(group_data.get("score", ""))
+            selected_option = group_data.get("option", "No selection")
 
-            # Fetch the selected option explicitly
-            selected_option = selected_options.get(category, {}).get(subcategory, {}).get(group, "No selection")
-
-             # Debug: Display the selected option being fetched
-            st.write(f"Debug: Category={category}, Subcategory={subcategory}, Group={group}, Selected Option={selected_option}")
+        #for group, letter_score in groups.items():
+            #group_color = get_score_color(letter_score)
+            #selected_option = selected_options[category][subcategory][group]
 
             # Display each group's details in a row
             col1, col2, col3 = st.columns([3, 2, 1], gap="small")
