@@ -531,6 +531,11 @@ if st.button("Calculate Eco-Score"):
     category_scores, overall_numeric_score = compute_score(selected_options)
     overall_score_letter = numeric_to_letter(overall_numeric_score)
 
+    # Debugging outputs for inspection
+    st.write("Selected Options:", selected_options)
+    st.write("Category Scores:", category_scores)
+    st.write("Overall Numeric Score:", overall_numeric_score)1
+    
     # Display overall score
     display_score_layout("Overall Eco-Score", overall_numeric_score, overall_score_letter)
 
