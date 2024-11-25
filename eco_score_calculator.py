@@ -577,7 +577,7 @@ if st.button("Calculate Eco-Score"):
         category_letter_score = numeric_to_letter(category_numeric_score) if category_numeric_score is not None else "No score"
 
         # Display category score in smaller boxes
-        display_score_layout(category, category_numeric_score if category_numeric_score is not None else "No score", category_letter_score, is_category=True)
+        display_score_layout(category, category_numeric_score if category_numeric_score is not None else "N/A", category_letter_score, is_category=True)
 
         # Expander for subcategories within this category
         with st.expander(f"Show details for {category}", expanded=False):
