@@ -501,7 +501,7 @@ def display_subcategories(category, subcategories, score_map):
         # Retrieve the subcategory score
         subcategory_score = subcategories[subcategory_name].get("subcategory_score", None)
         subcategory_letter_score = numeric_to_letter(subcategory_score) if subcategory_score is not None else "No score"
-        subcategory_numeric_score = subcategory_score if subcategory_score is not None else "N/A"
+        subcategory_numeric_score = f"{subcategory_score:.2f}" if subcategory_score is not None else "N/A"
 
         # Display subcategory header with score
         st.markdown(
