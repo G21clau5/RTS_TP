@@ -387,13 +387,19 @@ def compute_score(selected_options):
                     group_avg_score = sum(score_map[score.upper()] for score in group_scores) / len(group_scores)
                     category_total += group_avg_score
                     category_count += 1
+                else:
+                    # If no scores are selected, count it as "No score"
+                    group_data["display_score"] = "No score"
+
         if category_count > 0:
             category_avg = category_total / category_count
             category_scores[category] = category_avg
             total_score += category_total
             total_count += category_count
+        else:
+            category_scores[category] = "No score"
 
-    overall_score = total_score / total_count if total_count > 0 else 0 # The overall score is the average of all individual scores, not the average of averages
+    overall_score = total_score / total_count if total_count > 0 else "No score" # The overall score is the average of all individual scores, not the average of averages
     return category_scores, overall_score
 
 # Dynamically display options for each category
@@ -529,25 +535,23 @@ def display_subcategories(category, subcategories, score_map):
 if st.button("Calculate Eco-Score"):
     # Compute category and overall scores
     category_scores, overall_numeric_score = compute_score(selected_options)
-    overall_score_letter = numeric_to_letter(overall_numeric_score)
-
-    # Debugging outputs for inspection
-    st.write("Selected Options:", selected_options)
-    st.write("Category Scores:", category_scores)
-    st.write("Overall Numeric Score:", overall_numeric_score)
+    overall_score_letter = numeric_to_letter(overall_numeric_score) if overall_numeric_score != "No score" else "No score"
     
     # Display overall score
-    display_score_layout("Overall Eco-Score", overall_numeric_score, overall_score_letter)
+    display_score_layout("Overall Eco-Score", overall_numeric_score if overall_numeric_score != "No score" else "No score", overall_score_letter)
 
     st.markdown("<hr>", unsafe_allow_html=True)  # Separator
 
     # Display category scores
     for category, subcategories in selected_options.items():
         category_numeric_score = category_scores[category]
-        category_letter_score = numeric_to_letter(category_numeric_score)
+        if category_numeric_score == "No score":
+            category_letter_score = "No score"
+        else:
+            category_letter_score = numeric_to_letter(category_numeric_score)
 
         # Display category score in smaller boxes
-        display_score_layout(category, category_numeric_score, category_letter_score, is_category=True)
+        display_score_layout(category, category_numeric_score if category_numeric_score != "No score" else "No score", category_letter_score, is_category=True)
 
         # Expander for subcategories within this category
         with st.expander(f"Show details for {category}", expanded=False):
