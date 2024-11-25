@@ -534,7 +534,7 @@ if st.button("Calculate Eco-Score"):
     # Debugging outputs for inspection
     st.write("Selected Options:", selected_options)
     st.write("Category Scores:", category_scores)
-    st.write("Overall Numeric Score:", overall_numeric_score)1
+    st.write("Overall Numeric Score:", overall_numeric_score)
     
     # Display overall score
     display_score_layout("Overall Eco-Score", overall_numeric_score, overall_score_letter)
