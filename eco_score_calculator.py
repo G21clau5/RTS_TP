@@ -380,6 +380,8 @@ def compute_score(selected_options):
         category_total = 0
         category_count = 0
 
+        subcategory_scores = {}  # Dictionary to store subcategory scores
+
         for subcategory, groups in subcategories.items():
             subcategory_total = 0
             subcategory_count = 0
@@ -405,11 +407,11 @@ def compute_score(selected_options):
             # Compute subcategory average
             if subcategory_count > 0:
                 subcategory_avg_score = subcategory_total / subcategory_count
-                subcategory["subcategory_score"] = subcategory_avg_score
+                subcategory_scores[subcategory] = subcategory_avg_score
                 category_total += subcategory_avg_score
                 category_count += 1
             else:
-                subcategory["subcategory_score"] = None  # No score for this subcategory
+                subcategory_scores[subcategory] = None  # No score for this subcategory
 
 
         if category_count > 0:
@@ -495,9 +497,9 @@ def display_score_layout(label, numeric_score, letter_score, is_category=False):
 
 # Function to display subcategories with their numeric scores and letter scores
 def display_subcategories(category, subcategories, score_map):
-    for subcategory, groups in subcategories.items():
+    for subcategory_name, groups in subcategories.items():
         # Retrieve the subcategory score
-        subcategory_score = subcategory.get("subcategory_score", None)
+        subcategory_score = subcategories[subcategory_name].get("subcategory_score", None)
         subcategory_letter_score = numeric_to_letter(subcategory_score) if subcategory_score is not None else "No score"
         subcategory_numeric_score = subcategory_score if subcategory_score is not None else "N/A"
 
@@ -505,7 +507,7 @@ def display_subcategories(category, subcategories, score_map):
         st.markdown(
             f"""
             <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #8B0000;">
-                {subcategory} (Score: {subcategory_letter_score}, Numeric: {subcategory_numeric_score:.2f if subcategory_numeric_score else "N/A"})
+                {subcategory_name} (Score: {subcategory_letter_score}, Numeric: {subcategory_numeric_score:.2f})
             </div>
             """,
             unsafe_allow_html=True,
