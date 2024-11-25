@@ -463,6 +463,7 @@ def display_score_layout(label, numeric_score, letter_score, is_category=False):
         formatted_numeric_score = f"{numeric_score:.2f}"
     else:
         formatted_numeric_score = "N/A"
+
     # Streamlit columns to organize layout
     col1, col2, col3 = st.columns([1, 1, 1], gap="large")
 
@@ -482,7 +483,7 @@ def display_score_layout(label, numeric_score, letter_score, is_category=False):
         st.markdown(
             f"""
             <div style="background-color: {neutral_color}; padding: {padding}; border-radius: 5px; text-align: center; margin: 10px 0;">
-                <span style="font-size: {font_size}; font-weight: bold;">{numeric_score:.2f}</span>
+                <span style="font-size: {font_size}; font-weight: bold;">{formatted_numeric_score:.2f}</span>
             </div>
             """,
             unsafe_allow_html=True,
@@ -565,8 +566,11 @@ if st.button("Calculate Eco-Score"):
     category_scores, overall_numeric_score = compute_score(selected_options)
     overall_score_letter = numeric_to_letter(overall_numeric_score) if overall_numeric_score is not None else "No score"
     
+    # Ensure valid numeric score
+    numeric_score_overall = overall_numeric_score if isinstance(overall_numeric_score, (int, float)) else None
+
     # Display overall score
-    display_score_layout("Overall Eco-Score", overall_numeric_score if overall_numeric_score is not None else "N/A", overall_score_letter)
+    display_score_layout("Overall Eco-Score", numeric_score_overall, overall_score_letter)
 
     st.markdown("<hr>", unsafe_allow_html=True)  # Separator
 
@@ -575,8 +579,11 @@ if st.button("Calculate Eco-Score"):
         category_numeric_score = category_scores.get(category, None)
         category_letter_score = numeric_to_letter(category_numeric_score) if category_numeric_score is not None else "No score"
 
+        # Ensure valid numeric score for categories
+        category_numeric_score = category_numeric_score if isinstance(category_numeric_score, (int, float)) else None
+
         # Display category score in smaller boxes
-        display_score_layout(category, category_numeric_score if category_numeric_score is not None else "N/A", category_letter_score, is_category=True)
+        display_score_layout(category, category_numeric_score, category_letter_score, is_category=True)
 
         # Expander for subcategories within this category
         with st.expander(f"Show details for {category}", expanded=False):
