@@ -407,11 +407,11 @@ def compute_score(selected_options):
             # Compute subcategory average
             if subcategory_count > 0:
                 subcategory_avg_score = subcategory_total / subcategory_count
-                subcategory_scores[subcategory] = subcategory_avg_score
+                subcategories[subcategory]["subcategory_score"] = subcategory_avg_score
                 category_total += subcategory_avg_score
                 category_count += 1
             else:
-                subcategory_scores[subcategory] = None  # No score for this subcategory
+                subcategories[subcategory]["subcategory_score"] = None   # No score for this subcategory
 
 
         if category_count > 0:
@@ -459,10 +459,7 @@ def display_score_layout(label, numeric_score, letter_score, is_category=False):
     font_size = "18px" if is_category else "24px"
 
     # Convert numeric_score to a formatted string or "N/A" if it's not a number
-    if isinstance(numeric_score, (int, float)):
-        formatted_numeric_score = f"{numeric_score:.2f}"
-    else:
-        formatted_numeric_score = "N/A"
+    formatted_numeric_score = f"{numeric_score:.2f}" if numeric_score is not None else "N/A"
 
     # Streamlit columns to organize layout
     col1, col2, col3 = st.columns([1, 1, 1], gap="large")
