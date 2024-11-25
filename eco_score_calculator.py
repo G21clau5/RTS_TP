@@ -405,15 +405,11 @@ for category, subcategories in eco_data.items():
         selected_options[category][subcategory] = {}
         for group, options in groups.items():
             st.markdown(f"<div class='bold-text'>{group}</div>", unsafe_allow_html=True)
-            selected_option = st.selectbox(
-                f"Select an option for {group}",
-                options=list(options.keys()),
-                key=f"{category}_{subcategory}_{group}",
-            )
             #selected_options[category][subcategory][group] = {
             #    "option": selected_option,  # Descriptive name
             #    "score": options[selected_option],  # Corresponding score (letter grade)
             #}
+            # Use st.multiselect to allow selecting multiple options
             selected_options_group = st.multiselect(
                 f"Select options for {group}",
                 options=list(options.keys()),
