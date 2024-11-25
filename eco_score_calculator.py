@@ -407,11 +407,11 @@ def compute_score(selected_options):
             # Compute subcategory average
             if subcategory_count > 0:
                 subcategory_avg_score = subcategory_total / subcategory_count
-                subcategories[subcategory]["subcategory_score"] = subcategory_avg_score
+                subcategory_scores[subcategory] = subcategory_avg_score
                 category_total += subcategory_avg_score
                 category_count += 1
             else:
-                subcategories[subcategory]["subcategory_score"] = None   # No score for this subcategory
+                subcategory_scores[subcategory] = None   # No score for this subcategory
 
 
         if category_count > 0:
@@ -504,13 +504,13 @@ def display_subcategories(category, subcategories, score_map):
         # Retrieve the subcategory score
         subcategory_score = subcategories[subcategory_name].get("subcategory_score", None)
         subcategory_letter_score = numeric_to_letter(subcategory_score) if subcategory_score is not None else "No score"
-        subcategory_numeric_score = f"{subcategory_score:.2f}" if subcategory_score is not None else "N/A"
+        subcategory_numeric_score = (subcategory_score) if subcategory_score is not None else "No score"
 
         # Display subcategory header with score
         st.markdown(
             f"""
             <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #8B0000;">
-                {subcategory_name} (Score: {subcategory_letter_score}, Numeric: {subcategory_numeric_score:.2f})
+                {subcategory_name} (Score: {subcategory_letter_score}, Numeric: {subcategory_numeric_score})
             </div>
             """,
             unsafe_allow_html=True,
@@ -536,9 +536,10 @@ def display_subcategories(category, subcategories, score_map):
                 # Use columns to display selected options and their scores
                 for option in selected_options:
                     # Retrieve letter score and color for the option
-                    option_score = score_map.get(option.upper(), "No score")
-                    letter_score = option_score.upper() if option_score != "No score" else None
-                    score_color = get_score_color(letter_score)
+                    #option_score = score_map.get(option.upper(), "No score")
+                    #letter_score = option_score.upper() if option_score != "No score" else None
+                    option_letter_score = group_data["scores"][selected_options.index(option)]
+                    score_color = get_score_color(option_letter_score)
 
                     # Display option name and score in colored boxes
                     col1, col2 = st.columns([2, 1])
@@ -548,7 +549,7 @@ def display_subcategories(category, subcategories, score_map):
                         st.markdown(
                             f"""
                             <div style="background-color: {score_color}; padding: 5px; border-radius: 5px; text-align: center; color: white;">
-                                <span style="font-size: 14px; font-weight: bold;">{option_score}</span>
+                                <span style="font-size: 14px; font-weight: bold;">{option_letter_score}</span>
                             </div>
                             """,
                             unsafe_allow_html=True,
@@ -563,11 +564,8 @@ if st.button("Calculate Eco-Score"):
     category_scores, overall_numeric_score = compute_score(selected_options)
     overall_score_letter = numeric_to_letter(overall_numeric_score) if overall_numeric_score is not None else "No score"
     
-    # Ensure valid numeric score
-    numeric_score_overall = overall_numeric_score if isinstance(overall_numeric_score, (int, float)) else None
-
     # Display overall score
-    display_score_layout("Overall Eco-Score", numeric_score_overall, overall_score_letter)
+    display_score_layout("Overall Eco-Score", overall_numeric_score, overall_score_letter)
 
     st.markdown("<hr>", unsafe_allow_html=True)  # Separator
 
@@ -575,9 +573,6 @@ if st.button("Calculate Eco-Score"):
     for category, subcategories in selected_options.items():
         category_numeric_score = category_scores.get(category, None)
         category_letter_score = numeric_to_letter(category_numeric_score) if category_numeric_score is not None else "No score"
-
-        # Ensure valid numeric score for categories
-        category_numeric_score = category_numeric_score if isinstance(category_numeric_score, (int, float)) else None
 
         # Display category score in smaller boxes
         display_score_layout(category, category_numeric_score, category_letter_score, is_category=True)
