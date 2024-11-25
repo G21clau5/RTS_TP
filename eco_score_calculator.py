@@ -458,6 +458,12 @@ def display_score_layout(label, numeric_score, letter_score, is_category=False):
     padding = "10px" if is_category else "20px"
     font_size = "18px" if is_category else "24px"
 
+    # Convert numeric_score to a formatted string or "N/A" if it's not a number
+    if isinstance(numeric_score, (int, float)):
+        formatted_numeric_score = f"{numeric_score:.2f}"
+    else:
+        formatted_numeric_score = "N/A"
+
     # Streamlit columns to organize layout
     col1, col2, col3 = st.columns([1, 1, 1], gap="large")
 
@@ -561,7 +567,7 @@ if st.button("Calculate Eco-Score"):
     overall_score_letter = numeric_to_letter(overall_numeric_score) if overall_numeric_score is not None else "No score"
     
     # Display overall score
-    display_score_layout("Overall Eco-Score", overall_numeric_score if overall_numeric_score is not None else "No score", overall_score_letter)
+    display_score_layout("Overall Eco-Score", overall_numeric_score if overall_numeric_score is not None else "N/A", overall_score_letter)
 
     st.markdown("<hr>", unsafe_allow_html=True)  # Separator
 
