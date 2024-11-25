@@ -459,8 +459,10 @@ def display_score_layout(label, numeric_score, letter_score, is_category=False):
     font_size = "18px" if is_category else "24px"
 
     # Convert numeric_score to a formatted string or "N/A" if it's not a number
-    formatted_numeric_score = f"{numeric_score:.2f}" if isinstance(numeric_score, (int, float)) else "N/A"
-
+    if isinstance(numeric_score, (int, float)):
+        formatted_numeric_score = f"{numeric_score:.2f}"
+    else:
+        formatted_numeric_score = "N/A"
     # Streamlit columns to organize layout
     col1, col2, col3 = st.columns([1, 1, 1], gap="large")
 
