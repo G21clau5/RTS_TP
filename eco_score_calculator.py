@@ -382,10 +382,10 @@ def compute_score(selected_options):
         for subcategory, groups in subcategories.items():
             for group, group_data in groups.items():
                 # Retrieve the score (letter score) for each group
-                letter_score = group_data.get("score", None)
-                if letter_score and letter_score != "No score":  # Ignore "No score" (not considered when computing the mean)
-                    score_value = score_map.get(letter_score.upper(), 0)
-                    category_total += score_value
+                group_scores = group_data.get("scores", [])
+                if group_scores:  # Calculate the average score for the group
+                    group_avg_score = sum(score_map[score.upper()] for score in group_scores) / len(group_scores)
+                    category_total += group_avg_score
                     category_count += 1
         if category_count > 0:
             category_avg = category_total / category_count
@@ -410,12 +410,22 @@ for category, subcategories in eco_data.items():
                 options=list(options.keys()),
                 key=f"{category}_{subcategory}_{group}",
             )
-            #selected_options[category][subcategory][group] = options[selected_option]
-            # Store the descriptive name and retrieve the score dynamically when needed
+            #selected_options[category][subcategory][group] = {
+            #    "option": selected_option,  # Descriptive name
+            #    "score": options[selected_option],  # Corresponding score (letter grade)
+            #}
+            selected_options_group = st.multiselect(
+                f"Select options for {group}",
+                options=list(options.keys()),
+                key=f"{category}_{subcategory}_{group}",
+            )
+
+            # Store the selected options and their corresponding scores
             selected_options[category][subcategory][group] = {
-                "option": selected_option,  # Descriptive name
-                "score": options[selected_option],  # Corresponding score (letter grade)
+                "options": selected_options_group,  # List of selected options
+                "scores": [options[opt] for opt in selected_options_group if options[opt] is not None],  # Corresponding scores
             }
+            
 # Unified function to display results in a layout
 def display_score_layout(label, numeric_score, letter_score, is_category=False):
     score_color = get_score_color(letter_score)
