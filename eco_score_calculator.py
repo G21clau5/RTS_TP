@@ -408,10 +408,12 @@ def compute_score(selected_options):
             if subcategory_count > 0:
                 subcategory_avg_score = subcategory_total / subcategory_count
                 subcategory_scores[subcategory] = subcategory_avg_score
+                #subcategories[subcategory]["subcategory_score"] = subcategory_avg_score  
                 category_total += subcategory_avg_score
                 category_count += 1
             else:
                 subcategory_scores[subcategory] = None   # No score for this subcategory
+                #subcategories[subcategory]["subcategory_score"] = None
 
 
         if category_count > 0:
@@ -513,7 +515,7 @@ def display_subcategories(category, subcategories, score_map):
         # Retrieve the subcategory score
         subcategory_score = subcategories[subcategory_name].get("subcategory_score", None)
         subcategory_letter_score = numeric_to_letter(subcategory_score) if subcategory_score is not None else "No score"
-        subcategory_numeric_score = f"{subcategory_score:.2f}" if subcategory_score is not None else "No score"
+        subcategory_numeric_score = (subcategory_score) if subcategory_score is not None else "No score"
 
         # Display subcategory header with score
         st.markdown(
