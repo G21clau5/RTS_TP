@@ -431,16 +431,10 @@ def compute_score(selected_options):
 # Dynamically display options for each category
 for category, subcategories in eco_data.items():
     st.markdown(f"<div class='red-band'>{category}</div>", unsafe_allow_html=True)
-    selected_options[category] = {}  # Initialize category in selected_options
-
+    selected_options[category] = {}
     for subcategory, groups in subcategories.items():
         st.subheader(subcategory)
-        # Initialize subcategory with an empty dictionary and a placeholder for subcategory_score
-        selected_options[category][subcategory] = {
-            "subcategory_score": None,  # Placeholder for computed score
-            "groups": {}  # Nested dictionary for groups
-        }
-
+        selected_options[category][subcategory] = {}
         for group, options in groups.items():
             st.markdown(f"<div class='bold-text'>{group}</div>", unsafe_allow_html=True)
             
@@ -452,11 +446,11 @@ for category, subcategories in eco_data.items():
             )
 
             # Store the selected options and their corresponding scores
-            selected_options[category][subcategory]["groups"][group] = {
+            selected_options[category][subcategory][group] = {
                 "options": selected_options_group,  # List of selected options
                 "scores": [options[opt] for opt in selected_options_group if options[opt] is not None],  # Corresponding scores
             }
-            
+                        
 # Unified function to display results in a layout
 def display_score_layout(label, numeric_score, letter_score, is_category=False):
     score_color = get_score_color(letter_score)
