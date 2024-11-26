@@ -513,7 +513,7 @@ def display_subcategories(category, subcategories, score_map):
         st.markdown(
             f"""
             <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #8B0000;">
-                {subcategory_name} (Score: {subcategory_letter_score}, Numeric: {subcategory_numeric_score})
+                {subcategory_name} (Score: {subcategory_score}, Numeric: {subcategory_numeric_score})
             </div>
             """,
             unsafe_allow_html=True,
