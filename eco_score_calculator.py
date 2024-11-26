@@ -483,7 +483,7 @@ def display_score_layout(label, numeric_score, letter_score, is_category=False):
         st.markdown(
             f"""
             <div style="background-color: {neutral_color}; padding: {padding}; border-radius: 5px; text-align: center; margin: 10px 0;">
-                <span style="font-size: {font_size}; font-weight: bold;">{formatted_numeric_score:.2f}</span>
+                <span style="font-size: {font_size}; font-weight: bold;">{formatted_numeric_score}</span>
             </div>
             """,
             unsafe_allow_html=True,
