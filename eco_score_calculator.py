@@ -408,12 +408,12 @@ def compute_score(selected_options):
             if subcategory_count > 0:
                 subcategory_avg_score = subcategory_total / subcategory_count
                 subcategory_scores[subcategory] = subcategory_avg_score
-                #subcategories[subcategory]["subcategory_score"] = subcategory_avg_score  
+                subcategories[subcategory]["subcategory_score"] = subcategory_avg_score
                 category_total += subcategory_avg_score
                 category_count += 1
             else:
                 subcategory_scores[subcategory] = None   # No score for this subcategory
-                #subcategories[subcategory]["subcategory_score"] = None
+                subcategories[subcategory]["subcategory_score"] = none
 
 
         if category_count > 0:
@@ -431,10 +431,16 @@ def compute_score(selected_options):
 # Dynamically display options for each category
 for category, subcategories in eco_data.items():
     st.markdown(f"<div class='red-band'>{category}</div>", unsafe_allow_html=True)
-    selected_options[category] = {}
+    selected_options[category] = {}  # Initialize category in selected_options
+
     for subcategory, groups in subcategories.items():
         st.subheader(subcategory)
-        selected_options[category][subcategory] = {}
+        # Initialize subcategory with an empty dictionary and a placeholder for subcategory_score
+        selected_options[category][subcategory] = {
+            "subcategory_score": None,  # Placeholder for computed score
+            "groups": {}  # Nested dictionary for groups
+        }
+
         for group, options in groups.items():
             st.markdown(f"<div class='bold-text'>{group}</div>", unsafe_allow_html=True)
             
@@ -446,7 +452,7 @@ for category, subcategories in eco_data.items():
             )
 
             # Store the selected options and their corresponding scores
-            selected_options[category][subcategory][group] = {
+            selected_options[category][subcategory]["groups"][group] = {
                 "options": selected_options_group,  # List of selected options
                 "scores": [options[opt] for opt in selected_options_group if options[opt] is not None],  # Corresponding scores
             }
@@ -507,7 +513,7 @@ def display_score_layout(label, numeric_score, letter_score, is_category=False):
 def display_subcategories(category, subcategories, score_map):
     for subcategory_name, groups in subcategories.items():
         # Retrieve the subcategory score
-        subcategory_score = subcategory_scores.get(subcategory_name, None)
+        subcategory_score = subcategories[subcategory_name].get("subcategory_score", None)
         subcategory_letter_score = numeric_to_letter(subcategory_score) if subcategory_score is not None else "No score"
         subcategory_numeric_score = f"{subcategory_score:.2f}" if subcategory_score is not None else "No score"
 
