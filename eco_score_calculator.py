@@ -408,12 +408,10 @@ def compute_score(selected_options):
             if subcategory_count > 0:
                 subcategory_avg_score = subcategory_total / subcategory_count
                 subcategory_scores[subcategory] = subcategory_avg_score
-                subcategories[subcategory]["subcategory_score"] = subcategory_avg_score
                 category_total += subcategory_avg_score
                 category_count += 1
             else:
                 subcategory_scores[subcategory] = None   # No score for this subcategory
-                subcategories[subcategory]["subcategory_score"] = None
 
 
         if category_count > 0:
