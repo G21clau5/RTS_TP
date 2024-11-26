@@ -413,7 +413,7 @@ def compute_score(selected_options):
                 category_count += 1
             else:
                 subcategory_scores[subcategory] = None   # No score for this subcategory
-                subcategories[subcategory]["subcategory_score"] = none
+                subcategories[subcategory]["subcategory_score"] = None
 
 
         if category_count > 0:
