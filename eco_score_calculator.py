@@ -610,9 +610,9 @@ score_colors = {
     "B-": "#FFB300",        # Dark Yellow
     "C+": "#FF9800",        # Light Orange
     "C": "#FF5722",         # Orange
-    "C-": "#E64A19",        # Dark Orange
-    "D+": "#FF5252",        # Light Red
-    "D": "#F44336",         # Red
+    "C-": "#E64A19",        # Darker Orange
+    "D+": "#D84315",        # Red-Orange
+    "D": "#B71C1C",         # Dark Red
 }
 
 # Define the mapping for numbers under specific grades
