@@ -595,3 +595,53 @@ if st.button("Calculate Eco-Score"):
                                 """,
                                 unsafe_allow_html=True,
                             )
+
+# Correspondence of Scores
+st.markdown("<hr>", unsafe_allow_html=True)  # Separator
+st.markdown("<h3 style='text-align: center;'>Correspondance of Scores</h3>", unsafe_allow_html=True)
+
+# Letter scores boxes
+st.markdown(
+    """
+    <div style="display: flex; justify-content: center; align-items: center; gap: 5px; padding: 20px; flex-wrap: wrap;">
+    """,
+    unsafe_allow_html=True,
+)
+
+# Add letter score boxes in one row
+for score, color in score_color.items():
+    st.markdown(
+        f"""
+        <div style="display: flex; justify-content: center; align-items: center; text-align: center; width: 60px; height: 60px; margin: 5px; background-color: {color}; color: white; font-weight: bold; font-size: 16px; border-radius: 5px;">
+            {score}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+st.markdown("</div>", unsafe_allow_html=True)
+
+# Draw the Numeric Line Underneath
+st.markdown(
+    """
+    <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 10px;">
+    """,
+    unsafe_allow_html=True,
+)
+
+# Align main scores under their corresponding main grades
+# Numeric values aligned under the main grades
+main_letter_scores = ["A", "B", "C", "D"]
+main_numeric_scores = [1, 2, 3, 4]
+
+for score in main_numeric_scores:
+    st.markdown(
+        f"""
+        <div style="text-align: center; font-size: 18px; font-weight: bold;">
+            {score}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+st.markdown("</div>", unsafe_allow_html=True)
