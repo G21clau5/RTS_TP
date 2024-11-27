@@ -490,7 +490,7 @@ for category, subcategories in eco_data.items():
             }
 
 
-# Display the button to calculate and display results
+# Function to calculate and display results
 if st.button("Calculate Eco-Score"):
     # Perform the computations
     scores = compute_scores(selected_options, category_percentages)
@@ -498,6 +498,8 @@ if st.button("Calculate Eco-Score"):
     # Display overall eco-score
     overall_numeric_score = scores["overall_score"]
     overall_letter_score = numeric_to_letter(overall_numeric_score) if overall_numeric_score is not None else "No score"
+
+    # Precompute overall numeric display
     overall_numeric_display = f"{overall_numeric_score:.2f}" if overall_numeric_score is not None else "N/A"
 
     st.markdown("<hr>", unsafe_allow_html=True)  # Separator
@@ -505,14 +507,14 @@ if st.button("Calculate Eco-Score"):
     # Overall Eco-Score
     st.markdown(
         f"""
-        <div style="display: flex; justify-content: center; align-items: center;">
-            <div style="background-color: #E0E0E0; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center; margin-right: 10px;">
+        <div style="display: flex; justify-content: center; align-items: center; gap: 10px; padding: 20px;">
+            <div style="flex: 1; background-color: #E0E0E0; color: black; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center;">
                 Overall Eco-Score
             </div>
-            <div style="background-color: #E0E0E0; color: black; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center; margin-right: 10px;">
+            <div style="flex: 1; background-color: #E0E0E0; color: black; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center;">
                 {overall_numeric_display}
             </div>
-            <div style="background-color: {get_score_color(overall_letter_score)}; color: white; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center;">
+            <div style="flex: 1; background-color: {get_score_color(overall_letter_score)}; color: white; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center;">
                 {overall_letter_score}
             </div>
         </div>
@@ -524,20 +526,17 @@ if st.button("Calculate Eco-Score"):
     st.markdown("<hr>", unsafe_allow_html=True)  # Separator
     for category, category_score in scores["categories"].items():
         category_letter_score = numeric_to_letter(category_score) if category_score is not None else "No score"
+
+        # Precompute category numeric display
         category_numeric_display = f"{category_score:.2f}" if category_score is not None else "N/A"
 
-
-        # Category Scores
+        # Category Scores in a Colored Band
         st.markdown(
             f"""
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #E0E0E0; border-radius: 5px; margin-bottom: 10px;">
-                <span style="font-size: 18px; font-weight: bold;">{category}</span>
-                <span style="background-color: #E0E0E0; color: black; padding: 10px; border-radius: 5px; font-size: 16px; font-weight: bold; text-align: center;">
-                    {category_numeric_display}
-                </span>
-                <span style="background-color: {get_score_color(category_letter_score)}; color: white; padding: 10px; border-radius: 5px; font-size: 16px; font-weight: bold; text-align: center;">
-                    {category_letter_score}
-                </span>
+            <div style="background-color: {get_score_color(category_letter_score)}; padding: 15px; border-radius: 5px; margin-bottom: 15px; color: white; font-size: 24px; font-weight: bold; text-align: center;">
+                <span>{category}</span>
+                <span style="margin-left: 15px; font-size: 20px;">{category_numeric_display}</span>
+                <span style="margin-left: 15px; font-size: 20px;">{category_letter_score}</span>
             </div>
             """,
             unsafe_allow_html=True,
@@ -552,7 +551,7 @@ if st.button("Calculate Eco-Score"):
                 st.markdown(
                     f"""
                     <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0;">
-                        <span style="font-size: 16px; font-weight: bold; color: #8B0000;">{subcategory}</span>
+                        <span style="font-size: 20px; font-weight: bold; color: #8B0000;">{subcategory}</span>
                         <span style="background-color: {get_score_color(subcategory_letter_score)}; color: white; padding: 5px 10px; border-radius: 5px; font-size: 14px; font-weight: bold; text-align: center;">
                             {subcategory_letter_score}
                         </span>
@@ -563,9 +562,7 @@ if st.button("Calculate Eco-Score"):
 
                 # Display Groups and Their Selected Options
                 for group, group_data in selected_options[category][subcategory].items():
-                    # Only display groups with selected options
-                    if group_data["options"]:
-                        # Display the group name directly
+                    if group_data["options"]:  # Only show groups with selected options
                         st.markdown(f"**{group}**")
 
                         # Display each selected option with its score
@@ -573,9 +570,9 @@ if st.button("Calculate Eco-Score"):
                             score_color = get_score_color(score if score != "No score" else "No score")
                             st.markdown(
                                 f"""
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-left: 20px; margin-bottom: 5px;">
-                                    <span>{option}</span>
-                                    <span style="background-color: {score_color}; color: white; padding: 5px 10px; border-radius: 5px; font-size: 14px; font-weight: bold; text-align: center;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-left: 20px; margin-bottom: 10px;">
+                                    <span style="font-size: 16px;">{option}</span>
+                                    <span style="background-color: {score_color}; color: white; padding: 15px 20px; border-radius: 5px; font-size: 16px; font-weight: bold; text-align: center; width: 75px; height: 40px; display: flex; justify-content: center; align-items: center;">
                                         {score}
                                     </span>
                                 </div>
