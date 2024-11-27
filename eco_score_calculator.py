@@ -511,11 +511,11 @@ if st.button("Calculate Eco-Score"):
             <div style="flex: 1; background-color: #E0E0E0; color: black; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center;">
                 Overall Eco-Score
             </div>
-            <div style="flex: 1; background-color: #E0E0E0; color: black; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center;">
-                {overall_numeric_display}
-            </div>
             <div style="flex: 1; background-color: {get_score_color(overall_letter_score)}; color: white; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center;">
                 {overall_letter_score}
+            </div>
+            <div style="flex: 1; background-color: #E0E0E0; color: black; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center;">
+                {overall_numeric_display}
             </div>
         </div>
         """,
@@ -538,10 +538,10 @@ if st.button("Calculate Eco-Score"):
                     {category}
                 </div>
                 <div style="flex: 1; text-align: center;">
-                    {category_numeric_display}
+                    {category_letter_score}
                 </div>
                 <div style="flex: 1; text-align: right;">
-                    {category_letter_score}
+                    {category_numeric_display}
                 </div>
             </div>
             """,
