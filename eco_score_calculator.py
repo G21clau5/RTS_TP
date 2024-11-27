@@ -545,13 +545,22 @@ if st.button("Calculate Eco-Score"):
         # Expandable Subcategories for Each Category
         with st.expander(f"Show details for {category}"):
             for subcategory, subcategory_score in scores["subcategories"][category].items():
+                # Check if the subcategory has options selected
+                has_selected_options = any(
+                    group_data["options"]
+                    for group_data in selected_options[category][subcategory].values()
+                )
+
+                if not has_selected_options:
+                    continue  # Skip subcategory if no options are selected
+
                 subcategory_letter_score = numeric_to_letter(subcategory_score) if subcategory_score is not None else "No score"
 
-                # Subcategory Name and Score
+                # Subcategory Name and Score on the Same Line
                 st.markdown(
                     f"""
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0;">
-                        <span style="font-size: 20px; font-weight: bold; color: #8B0000;">{subcategory}</span>
+                    <div style="display: flex; justify-content: flex-start; align-items: center; margin: 10px 0;">
+                        <span style="font-size: 16px; font-weight: bold; color: #8B0000; margin-right: 10px;">{subcategory}</span>
                         <span style="background-color: {get_score_color(subcategory_letter_score)}; color: white; padding: 5px 10px; border-radius: 5px; font-size: 14px; font-weight: bold; text-align: center;">
                             {subcategory_letter_score}
                         </span>
