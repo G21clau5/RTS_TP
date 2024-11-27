@@ -639,7 +639,7 @@ for i, (letter, color) in enumerate(score_colors.items()):
         if letter in number_mapping:
             st.markdown(
                 f"""
-                <div style="font-size: 16px; text-align: center; margin-top: 5px; font-weight: bold;">
+                <div style="font-size: 20px; text-align: center; margin-top: 5px; font-weight: bold;">
                     {number_mapping[letter]}
                 </div>
                 """,
