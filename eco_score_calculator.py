@@ -626,7 +626,9 @@ st.markdown(
 for letter, color in score_colors.items():
     st.markdown(
         f"""
-        <div style="flex: 1; background-color: {color}; color: white; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center;">
+        <div style="width: 50px; height: 50px; background-color: {color}; color: white; padding: 10px; 
+                    border-radius: 5px; font-size: 20px; font-weight: bold; display: flex; 
+                    justify-content: center; align-items: center; text-align: center;">
             {letter}
         </div>
         """,
