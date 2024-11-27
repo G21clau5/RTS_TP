@@ -498,6 +498,8 @@ if st.button("Calculate Eco-Score"):
     # Display overall eco-score
     overall_numeric_score = scores["overall_score"]
     overall_letter_score = numeric_to_letter(overall_numeric_score) if overall_numeric_score is not None else "No score"
+    overall_numeric_display = f"{overall_numeric_score:.2f}" if overall_numeric_score is not None else "N/A"
+
     st.markdown("<hr>", unsafe_allow_html=True)  # Separator
 
     # Overall Eco-Score
@@ -508,7 +510,7 @@ if st.button("Calculate Eco-Score"):
                 Overall Eco-Score
             </div>
             <div style="background-color: #E0E0E0; color: black; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center; margin-right: 10px;">
-                {f"{overall_numeric_score:.2f}" if overall_numeric_score is not None else "N/A"}
+                {overall_numeric_display}
             </div>
             <div style="background-color: {get_score_color(overall_letter_score)}; color: white; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center;">
                 {overall_letter_score}
