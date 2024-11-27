@@ -508,7 +508,7 @@ if st.button("Calculate Eco-Score"):
                 Overall Eco-Score
             </div>
             <div style="background-color: #E0E0E0; color: black; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center; margin-right: 10px;">
-                {overall_numeric_score:.2f if overall_numeric_score is not None else "N/A"}
+                {f"{overall_numeric_score:.2f}" if overall_numeric_score is not None else "N/A"}
             </div>
             <div style="background-color: {get_score_color(overall_letter_score)}; color: white; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center;">
                 {overall_letter_score}
