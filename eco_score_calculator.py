@@ -609,7 +609,7 @@ score_colors = {
     "B": "#FFC107",         # Yellow
     "B-": "#FFB300",        # Dark Yellow
     "C+": "#FF9800",        # Light Orange
-    "C": "#FF5722",         # Orange
+    "C": "#FF5721",         # Orange
     "C-": "#E64A19",        # Darker Orange
     "D+": "#D84315",        # Red-Orange
     "D": "#B71C1C",         # Dark Red
