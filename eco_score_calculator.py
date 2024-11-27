@@ -600,6 +600,20 @@ if st.button("Calculate Eco-Score"):
 st.markdown("<hr>", unsafe_allow_html=True)  # Separator
 st.markdown("<h3 style='text-align: center;'>Correspondence of Scores</h3>", unsafe_allow_html=True)
 
+# Define the letter grades and their corresponding colors
+score_colors = {
+    "A": "#4CAF50",         # Green
+    "A-": "#8BC34A",        # Light Green
+    "B+": "#FFEB3B",        # Light Yellow
+    "B": "#FFC107",         # Yellow
+    "B-": "#FFB300",        # Dark Yellow
+    "C+": "#FF9800",        # Light Orange
+    "C": "#FF5722",         # Orange
+    "C-": "#E64A19",        # Dark Orange
+    "D+": "#FF5252",        # Light Red
+    "D": "#F44336",         # Red
+}
+
 # Letter Grade Boxes (on a single line)
 st.markdown(
     """
