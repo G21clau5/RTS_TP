@@ -367,223 +367,214 @@ def numeric_to_letter(score):
     else:
         return "N/A"
 
-# Initialize selected_options as an empty dictionary
-selected_options = {}
 
-# Function to calculate the eco-score
-def compute_score(selected_options):
-    category_scores = {}
-    total_score = 0
-    total_count = 0
-    
+selected_options = {}  # Empty dictionary to store user selections
+
+# Define weights for categories (hidden from the user)
+category_percentages = {
+    "Energy": 30,  # Assign higher importance to Energy
+    "Material": 20,  # Lower importance for Material
+    "Travel/Transport": 40,  # Medium importance
+    "Catering": 10,  # Default weight
+}
+
+# Compute scores
+def compute_scores(selected_options, category_percentages=None):
+    """
+    Computes scores for groups, subcategories, categories, and the overall score.
+
+    Parameters:
+        selected_options (dict): User-selected options structured as {category: {subcategory: {group: [options]}}}.
+        category_percentages (dict): Percentages for categories (hidden from user). Must sum to 100.
+
+    Returns:
+        dict: Scores for groups, subcategories, categories, and the overall score.
+    """
+    scores = {
+        "groups": {},        # Scores for each group
+        "subcategories": {}, # Scores for each subcategory
+        "categories": {},    # Scores for each category
+        "overall_score": None  # Overall score
+    }
+
+    # Step 1: Calculate scores for groups
     for category, subcategories in selected_options.items():
-        category_total = 0
-        category_count = 0
-
-        subcategory_scores = {}  # Dictionary to store subcategory scores
-
+        scores["groups"][category] = {}
         for subcategory, groups in subcategories.items():
-            subcategory_total = 0
-            subcategory_count = 0
+            scores["groups"][category][subcategory] = {}
+            for group, data in groups.items():
+                # Filter out "No score" and None values for calculations
+                valid_scores = [score_map[score] for score in data["scores"] if score not in ("No score", None)]
 
-            for group, group_data in groups.items():
-                # Retrieve the score (letter score) for each group
-                group_scores = group_data.get("scores", [])
-                if group_scores:  # Calculate the average score for the group
-                    if len(group_scores) == 1:
-                        group_avg_score = score_map[group_scores[0].upper()]  # Single option selected
-                    else:
-                        group_avg_score = sum(score_map[score.upper()] for score in group_scores) / len(group_scores)  # Average score for multiple options
-
-                    # Store the average score for this group
-                    group_data["group_score"] = group_avg_score
-                    subcategory_total += group_avg_score
-                    subcategory_count += 1    
-                    
+                if valid_scores:  # Only calculate if there are valid scores
+                    group_avg_score = sum(valid_scores) / len(valid_scores)
+                    scores["groups"][category][subcategory][group] = group_avg_score
                 else:
-                    # If no scores are selected, do not include the group
-                    group_data["group_score"] = None
-            
-            # Compute subcategory average
-            if subcategory_count > 0:
-                subcategory_avg_score = subcategory_total / subcategory_count
-                subcategory_scores[subcategory] = subcategory_avg_score
-                #subcategories[subcategory]["subcategory_score"] = subcategory_avg_score  
-                category_total += subcategory_avg_score
-                category_count += 1
+                    scores["groups"][category][subcategory][group] = None
+
+    # Step 2: Calculate scores for subcategories
+    for category, subcategories in scores["groups"].items():
+        scores["subcategories"][category] = {}
+        for subcategory, groups in subcategories.items():
+            valid_group_scores = [
+                score for score in groups.values() if score is not None
+            ]
+            if valid_group_scores:
+                subcategory_avg_score = sum(valid_group_scores) / len(valid_group_scores)
+                scores["subcategories"][category][subcategory] = subcategory_avg_score
             else:
-                subcategory_scores[subcategory] = None   # No score for this subcategory
-                #subcategories[subcategory]["subcategory_score"] = None
+                scores["subcategories"][category][subcategory] = None # No valid group scores
 
-
-        if category_count > 0:
-            category_avg_score = category_total / category_count
-            category_scores[category] = category_avg_score
-            total_score += category_total
-            total_count += category_count
+    # Step 3: Calculate scores for categories
+    for category, subcategories in scores["subcategories"].items():
+        valid_subcategory_scores = [
+            score for score in subcategories.values() if score is not None
+        ]
+        if valid_subcategory_scores:
+            category_avg_score = sum(valid_subcategory_scores) / len(valid_subcategory_scores)
+            scores["categories"][category] = category_avg_score
         else:
-            category_scores[category] = None  # No valid data for this category
-    
-    # Compute overall score
-    overall_score = total_score / total_count if total_count > 0 else None # The overall score is the average of averages
-    return category_scores, overall_score
+            scores["categories"][category] = None  # No valid subcategory scores
 
-# Dynamically display options for each category
+    # Step 4: Calculate overall score with percentages
+    category_scores = [
+        (category, score)
+        for category, score in scores["categories"].items()
+        if score is not None
+    ]
+    if category_scores:
+        total_percentage = sum(category_percentages.values())
+        weighted_scores = [
+            score * (category_percentages.get(category, 0) / total_percentage)
+            for category, score in category_scores
+        ]
+        scores["overall_score"] = sum(weighted_scores)
+    else:
+        scores["overall_score"] = None  # No valid category scores
+
+    return scores
+
+# Display the options
+# Step 1: Add a text input for the production title
+production_title = st.text_input("Enter the title of the production", placeholder="e.g., Hockey game Servette vs LHC")
+
+# Display the entered title dynamically (optional)
+if production_title:
+    st.markdown(f"### Computing Eco-Score for: **{production_title}**")
+
+# Step 2: Dynamically display options for each category
 for category, subcategories in eco_data.items():
+
     st.markdown(f"<div class='red-band'>{category}</div>", unsafe_allow_html=True)
-    selected_options[category] = {}
+    
+    selected_options[category] = {} # Initialize category in selected options
+
     for subcategory, groups in subcategories.items():
         st.subheader(subcategory)
-        selected_options[category][subcategory] = {}
+        selected_options[category][subcategory] = {} # Initialize subcategory
+
         for group, options in groups.items():
             st.markdown(f"<div class='bold-text'>{group}</div>", unsafe_allow_html=True)
             
             # Use st.multiselect to allow selecting multiple options
             selected_options_group = st.multiselect(
                 f"Select options for {group}",
-                options=list(options.keys()),
-                key=f"{category}_{subcategory}_{group}",
+                options=list(options.keys()), # Available options
+                key=f"{category}_{subcategory}_{group}", # Unique key for each group
             )
 
             # Store the selected options and their corresponding scores
             selected_options[category][subcategory][group] = {
                 "options": selected_options_group,  # List of selected options
-                "scores": [options[opt] for opt in selected_options_group if options[opt] is not None],  # Corresponding scores
+                "scores": [options[opt] if options[opt] is not None else "No score" for opt in selected_options_group],  # Corresponding scores
             }
-                        
-# Unified function to display results in a layout
-def display_score_layout(label, numeric_score, letter_score, is_category=False):
-    score_color = get_score_color(letter_score)
-    neutral_color = "#E0E0E0"  # Neutral color for background boxes
-
-    # Smaller padding for category results
-    padding = "10px" if is_category else "20px"
-    font_size = "18px" if is_category else "24px"
-
-    # Convert numeric_score to a formatted string or "N/A" if it's not a number
-    if numeric_score is not None:
-        formatted_numeric_score = f"{numeric_score:.2f}"
-    else:
-        formatted_numeric_score = "N/A"
-
-    # Streamlit columns to organize layout
-    col1, col2, col3 = st.columns([1, 1, 1], gap="large")
-
-    # Label box (Category or Overall)
-    with col1:
-        st.markdown(
-            f"""
-            <div style="background-color: {neutral_color}; padding: {padding}; border-radius: 5px; text-align: center; margin: 10px 0;">
-                <span style="font-size: {font_size}; font-weight: bold;">{label}</span>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    # Numeric score box
-    with col2:
-        st.markdown(
-            f"""
-            <div style="background-color: {neutral_color}; padding: {padding}; border-radius: 5px; text-align: center; margin: 10px 0;">
-                <span style="font-size: {font_size}; font-weight: bold;">{formatted_numeric_score}</span>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    # Letter score box (with color)
-    with col3:
-        st.markdown(
-            f"""
-            <div style="background-color: {score_color}; padding: {padding}; border-radius: 5px; text-align: center; color: white; margin: 10px 0;">
-                <span style="font-size: {font_size}; font-weight: bold;">{letter_score}</span>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
 
 
-# Function to display subcategories with their numeric scores and letter scores
-def display_subcategories(category, subcategories, score_map):
-    for subcategory_name, groups in subcategories.items():
-        # Retrieve the subcategory score
-        subcategory_score = subcategories[subcategory_name].get("subcategory_score", None)
-        subcategory_letter_score = numeric_to_letter(subcategory_score) if subcategory_score is not None else "No score"
-        subcategory_numeric_score = (subcategory_score) if subcategory_score is not None else "No score"
-
-        # Display subcategory header with score
-        st.markdown(
-            f"""
-            <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #8B0000;">
-                {subcategory_name} (Score: {subcategory_letter_score}, Numeric: {subcategory_numeric_score})
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        # Display group details indented to the right
-        st.markdown(
-            """
-            <div style="margin-left: 30px;">
-            """,
-            unsafe_allow_html=True,
-        )
-
-        for group, group_data in groups.items():
-            group_score = group_data.get("group_score", None)
-            if group_score is not None:
-                group_letter_score = numeric_to_letter(group_score)
-                selected_options = group_data.get("options", [])
-            
-                # Display group name and score
-                st.markdown(f"**Group: {group}** (Score: {group_letter_score})")
-            
-                # Use columns to display selected options and their scores
-                for option in selected_options:
-                    # Retrieve letter score and color for the option
-                    #option_score = score_map.get(option.upper(), "No score")
-                    #letter_score = option_score.upper() if option_score != "No score" else None
-                    option_letter_score = group_data["scores"][selected_options.index(option)]
-                    score_color = get_score_color(option_letter_score)
-
-                    # Display option name and score in colored boxes
-                    col1, col2 = st.columns([2, 1])
-                    with col1:
-                        st.markdown(f"- {option}")
-                    with col2:
-                        st.markdown(
-                            f"""
-                            <div style="background-color: {score_color}; padding: 5px; border-radius: 5px; text-align: center; color: white;">
-                                <span style="font-size: 14px; font-weight: bold;">{option_letter_score}</span>
-                            </div>
-                            """,
-                            unsafe_allow_html=True,
-                        )
-            else:
-                st.markdown(f"**Group: {group}**: No options selected")
-
-
-# Main display logic
+# Display the button to calculate and display results
 if st.button("Calculate Eco-Score"):
-    # Compute category and overall scores
-    category_scores, overall_numeric_score = compute_score(selected_options)
-    overall_score_letter = numeric_to_letter(overall_numeric_score) if overall_numeric_score is not None else "No score"
-    
-    # Display overall score
-    display_score_layout("Overall Eco-Score", overall_numeric_score, overall_score_letter)
+    # Perform the computations
+    scores = compute_scores(selected_options, category_percentages)
 
+    # Display overall eco-score
+    overall_numeric_score = scores["overall_score"]
+    overall_letter_score = numeric_to_letter(overall_numeric_score) if overall_numeric_score is not None else "No score"
     st.markdown("<hr>", unsafe_allow_html=True)  # Separator
 
+    # Overall Eco-Score
+    st.markdown(
+        f"""
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <div style="background-color: #E0E0E0; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center; margin-right: 10px;">
+                Overall Eco-Score
+            </div>
+            <div style="background-color: #E0E0E0; color: black; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center; margin-right: 10px;">
+                {overall_numeric_score:.2f if overall_numeric_score is not None else "N/A"}
+            </div>
+            <div style="background-color: {get_score_color(overall_letter_score)}; color: white; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center;">
+                {overall_letter_score}
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
     # Display category scores
-    for category, subcategories in selected_options.items():
-        category_numeric_score = category_scores.get(category, None)
-        category_letter_score = numeric_to_letter(category_numeric_score) if category_numeric_score is not None else "No score"
+    st.markdown("<hr>", unsafe_allow_html=True)  # Separator
+    for category, category_score in scores["categories"].items():
+        category_letter_score = numeric_to_letter(category_score) if category_score is not None else "No score"
 
-        # Display category score in smaller boxes
-        display_score_layout(category, category_numeric_score, category_letter_score, is_category=True)
+        # Category Scores
+        st.markdown(
+            f"""
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #E0E0E0; border-radius: 5px; margin-bottom: 10px;">
+                <span style="font-size: 18px; font-weight: bold;">{category}</span>
+                <span style="background-color: #E0E0E0; color: black; padding: 10px; border-radius: 5px; font-size: 16px; font-weight: bold; text-align: center;">
+                    {category_score:.2f if category_score is not None else "N/A"}
+                </span>
+                <span style="background-color: {get_score_color(category_letter_score)}; color: white; padding: 10px; border-radius: 5px; font-size: 16px; font-weight: bold; text-align: center;">
+                    {category_letter_score}
+                </span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-        # Expander for subcategories within this category
-        with st.expander(f"Show details for {category}", expanded=False):
-            display_subcategories(category, subcategories, score_map)
+        # Expandable Subcategories for Each Category
+        with st.expander(f"Show details for {category}"):
+            for subcategory, subcategory_score in scores["subcategories"][category].items():
+                subcategory_letter_score = numeric_to_letter(subcategory_score) if subcategory_score is not None else "No score"
 
-    st.markdown("<hr>", unsafe_allow_html=True)
+                # Subcategory Name and Score
+                st.markdown(
+                    f"""
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0;">
+                        <span style="font-size: 16px; font-weight: bold; color: #8B0000;">{subcategory}</span>
+                        <span style="background-color: {get_score_color(subcategory_letter_score)}; color: white; padding: 5px 10px; border-radius: 5px; font-size: 14px; font-weight: bold; text-align: center;">
+                            {subcategory_letter_score}
+                        </span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+                # Display Groups and Their Selected Options
+                for group, group_data in selected_options[category][subcategory].items():
+                    # Only display groups with selected options
+                    if group_data["options"]:
+                        # Display the group name directly
+                        st.markdown(f"**{group}**")
+
+                        # Display each selected option with its score
+                        for option, score in zip(group_data["options"], group_data["scores"]):
+                            score_color = get_score_color(score if score != "No score" else "No score")
+                            st.markdown(
+                                f"""
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-left: 20px; margin-bottom: 5px;">
+                                    <span>{option}</span>
+                                    <span style="background-color: {score_color}; color: white; padding: 5px 10px; border-radius: 5px; font-size: 14px; font-weight: bold; text-align: center;">
+                                        {score}
+                                    </span>
+                                </div>
+                                """,
+                                unsafe_allow_html=True,
+                            )
