@@ -560,8 +560,8 @@ if st.button("Calculate Eco-Score"):
                 st.markdown(
                     f"""
                     <div style="display: flex; justify-content: flex-start; align-items: center; margin: 10px 0;">
-                        <span style="font-size: 16px; font-weight: bold; color: #8B0000; margin-right: 10px;">{subcategory}</span>
-                        <span style="background-color: {get_score_color(subcategory_letter_score)}; color: white; padding: 5px 10px; border-radius: 5px; font-size: 14px; font-weight: bold; text-align: center;">
+                        <span style="font-size: 20px; font-weight: bold; color: #8B0000; margin-right: 10px;">{subcategory}</span>
+                        <span style="background-color: {get_score_color(subcategory_letter_score)}; color: white; padding: 5px 10px; border-radius: 5px; font-size: 20px; font-weight: bold; text-align: center;">
                             {subcategory_letter_score}
                         </span>
                     </div>
