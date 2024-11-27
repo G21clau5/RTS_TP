@@ -596,6 +596,8 @@ if st.button("Calculate Eco-Score"):
                                 unsafe_allow_html=True,
                             )
 
+import streamlit as st
+
 # Correspondence of Scores
 st.markdown("<hr>", unsafe_allow_html=True)  # Separator
 st.markdown("<h3 style='text-align: center;'>Correspondence of Scores</h3>", unsafe_allow_html=True)
@@ -614,18 +616,31 @@ score_colors = {
     "D": "#F44336",         # Red
 }
 
+# Corresponding numbers for each letter grade
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
 # Create columns for each grade
 columns = st.columns(len(score_colors))
 
-# Add each grade box into its corresponding column
-for i, (letter, color) in enumerate(score_colors.items()):
+# Add each grade box and its corresponding number into its column
+for i, ((letter, color), number) in enumerate(zip(score_colors.items(), numbers)):
     with columns[i]:
+        # Add the letter grade box
         st.markdown(
             f"""
             <div style="width: 50px; height: 50px; background-color: {color}; color: white; 
                         padding: 10px; border-radius: 5px; font-size: 20px; font-weight: bold; 
                         display: flex; justify-content: center; align-items: center; text-align: center;">
                 {letter}
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        # Add the number below the letter grade box
+        st.markdown(
+            f"""
+            <div style="font-size: 16px; text-align: center; margin-top: 5px; font-weight: bold;">
+                {number}
             </div>
             """,
             unsafe_allow_html=True,
