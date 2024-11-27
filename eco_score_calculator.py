@@ -533,15 +533,22 @@ if st.button("Calculate Eco-Score"):
         # Category Scores in a Colored Band
         st.markdown(
             f"""
-            <div style="background-color: {get_score_color(category_letter_score)}; padding: 15px; border-radius: 5px; margin-bottom: 15px; color: white; font-size: 24px; font-weight: bold; text-align: center;">
-                <span>{category}</span>
-                <span style="margin-left: 15px; font-size: 20px;">{category_numeric_display}</span>
-                <span style="margin-left: 15px; font-size: 20px;">{category_letter_score}</span>
+            <div style="background-color: {get_score_color(category_letter_score)}; padding: 15px; border-radius: 5px; margin-bottom: 15px; color: white; font-size: 24px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1; text-align: left;">
+                    {category}
+                </div>
+                <div style="flex: 1; text-align: center;">
+                    {category_numeric_display}
+                </div>
+                <div style="flex: 1; text-align: right;">
+                    {category_letter_score}
+                </div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
+        
         # Expandable Subcategories for Each Category
         with st.expander(f"Show details for {category}"):
             for subcategory, subcategory_score in scores["subcategories"][category].items():
