@@ -579,7 +579,7 @@ if st.button("Calculate Eco-Score"):
                             score_color = get_score_color(score if score != "No score" else "No score")
                             st.markdown(
                                 f"""
-                                <div style="display: flex; justify-content: flex-start; align-items: center; margin-left: 20px; margin-bottom: 10px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-left: 20px; margin-bottom: 10px;">
                                     <span style="font-size: 16px;">{option}</span>
                                     <span style="background-color: {score_color}; color: white; padding: 15px 20px; border-radius: 5px; font-size: 16px; font-weight: bold; text-align: center; width: 75px; height: 40px; display: flex; justify-content: center; align-items: center;">
                                         {score}
