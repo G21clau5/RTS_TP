@@ -614,10 +614,11 @@ score_colors = {
     "D": "#F44336",         # Red
 }
 
-# Letter Grade Boxes (on a single line)
+# Start container for grades and numbers
 st.markdown(
     """
-    <div style="display: flex; justify-content: center; align-items: center; gap: 8px; padding: 10px;">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 10px;">
+        <div style="display: flex; justify-content: center; gap: 8px;">
     """,
     unsafe_allow_html=True,
 )
@@ -633,12 +634,13 @@ for letter, color in score_colors.items():
         unsafe_allow_html=True,
     )
 
+# Close row for letter grades
 st.markdown("</div>", unsafe_allow_html=True)
 
 # Numeric Scores Below (aligned under main grades A, B, C, D)
 st.markdown(
     """
-    <div style="display: flex; justify-content: center; align-items: center; gap: 10px; padding: 10px;">
+    <div style="display: flex; justify-content: center; gap: 8px;">
     """,
     unsafe_allow_html=True,
 )
@@ -650,11 +652,12 @@ main_numeric_scores = [1, 2, 3, 4]
 for numeric in main_numeric_scores:
     st.markdown(
         f"""
-        <div style="width: 40px; text-align: center; font-size: 16px; font-weight: bold; margin: 5px;">
+        <div style="width: 40px; text-align: center; font-size: 16px; font-weight: bold;">
             {numeric}
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-st.markdown("</div>", unsafe_allow_html=True)
+# Close container for grades and numbers
+st.markdown("</div></div>", unsafe_allow_html=True)
