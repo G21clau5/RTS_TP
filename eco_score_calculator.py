@@ -329,10 +329,10 @@ def get_score_color(letter_score):
         "B": "#FFC107",         # Yellow
         "B-": "#FFB300",        # Dark Yellow
         "C+": "#FF9800",        # Light Orange
-        "C": "#FF5722",         # Orange
-        "C-": "#E64A19",        # Dark Orange
-        "D+": "#FF5252",        # Light Red
-        "D": "#F44336",         # Red
+        "C": "#FF5720",         # Orange
+        "C-": "#E64A19",        # Darker Orange
+        "D+": "#D84315",        # Red-Orange
+        "D": "#B71C1C",         # Dark Red
     }
 
     # Handle invalid or missing scores
