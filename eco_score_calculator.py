@@ -617,7 +617,7 @@ score_colors = {
 # Letter Grade Boxes (on a single line)
 st.markdown(
     """
-    <div style="display: flex; justify-content: center; align-items: center; gap: 10px; padding: 10px;">
+    <div style="display: flex; justify-content: center; align-items: center; gap: 8px; padding: 10px;">
     """,
     unsafe_allow_html=True,
 )
@@ -626,7 +626,7 @@ st.markdown(
 for letter, color in score_colors.items():
     st.markdown(
         f"""
-        <div style="width: 60px; height: 60px; background-color: {color}; color: white; font-weight: bold; font-size: 16px; border-radius: 5px; display: flex; justify-content: center; align-items: center; text-align: center; margin: 5px;">
+        <div style="width: 40px; height: 40px; background-color: {color}; color: white; font-weight: bold; font-size: 14px; border-radius: 5px; display: flex; justify-content: center; align-items: center; text-align: center; margin: 5px;">
             {letter}
         </div>
         """,
@@ -650,7 +650,7 @@ main_numeric_scores = [1, 2, 3, 4]
 for numeric in main_numeric_scores:
     st.markdown(
         f"""
-        <div style="width: 60px; text-align: center; font-size: 18px; font-weight: bold; margin: 5px;">
+        <div style="width: 40px; text-align: center; font-size: 16px; font-weight: bold; margin: 5px;">
             {numeric}
         </div>
         """,
