@@ -596,7 +596,6 @@ if st.button("Calculate Eco-Score"):
                                 unsafe_allow_html=True,
                             )
 
-import streamlit as st
 
 # Correspondence of Scores
 st.markdown("<hr>", unsafe_allow_html=True)  # Separator
@@ -616,14 +615,14 @@ score_colors = {
     "D": "#F44336",         # Red
 }
 
-# Corresponding numbers for each letter grade
-numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+# Define the mapping for numbers under specific grades
+number_mapping = {"A": 1, "B": 2, "C": 3, "D": 4}
 
 # Create columns for each grade
 columns = st.columns(len(score_colors))
 
-# Add each grade box and its corresponding number into its column
-for i, ((letter, color), number) in enumerate(zip(score_colors.items(), numbers)):
+# Add each grade box into its corresponding column
+for i, (letter, color) in enumerate(score_colors.items()):
     with columns[i]:
         # Add the letter grade box
         st.markdown(
@@ -636,12 +635,13 @@ for i, ((letter, color), number) in enumerate(zip(score_colors.items(), numbers)
             """,
             unsafe_allow_html=True,
         )
-        # Add the number below the letter grade box
-        st.markdown(
-            f"""
-            <div style="font-size: 16px; text-align: center; margin-top: 5px; font-weight: bold;">
-                {number}
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        # Add the number below if the letter is in the mapping
+        if letter in number_mapping:
+            st.markdown(
+                f"""
+                <div style="font-size: 16px; text-align: center; margin-top: 5px; font-weight: bold;">
+                    {number_mapping[letter]}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
