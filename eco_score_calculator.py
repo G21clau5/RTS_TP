@@ -600,33 +600,19 @@ if st.button("Calculate Eco-Score"):
 st.markdown("<hr>", unsafe_allow_html=True)  # Separator
 st.markdown("<h3 style='text-align: center;'>Correspondence of Scores</h3>", unsafe_allow_html=True)
 
-# Letter grades and their colors
-score_colors = {
-    "A": "#4CAF50",         # Green
-    "A-": "#8BC34A",        # Light Green
-    "B+": "#FFEB3B",        # Light Yellow
-    "B": "#FFC107",         # Yellow
-    "B-": "#FFB300",        # Dark Yellow
-    "C+": "#FF9800",        # Light Orange
-    "C": "#FF5722",         # Orange
-    "C-": "#E64A19",        # Dark Orange
-    "D+": "#FF5252",        # Light Red
-    "D": "#F44336",         # Red
-}
-
-# Display Letter Score Boxes
+# Letter Grade Boxes (on a single line)
 st.markdown(
     """
-    <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; padding: 20px;">
+    <div style="display: flex; justify-content: center; align-items: center; gap: 10px; padding: 10px;">
     """,
     unsafe_allow_html=True,
 )
 
-# Generate boxes for each letter grade
+# Add all letter grade boxes in one horizontal row
 for letter, color in score_colors.items():
     st.markdown(
         f"""
-        <div style="width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; margin: 5px; background-color: {color}; color: white; font-weight: bold; font-size: 16px; border-radius: 10px; text-align: center;">
+        <div style="width: 60px; height: 60px; background-color: {color}; color: white; font-weight: bold; font-size: 16px; border-radius: 5px; display: flex; justify-content: center; align-items: center; text-align: center; margin: 5px;">
             {letter}
         </div>
         """,
@@ -635,22 +621,22 @@ for letter, color in score_colors.items():
 
 st.markdown("</div>", unsafe_allow_html=True)
 
-# Numeric Line Under Main Grades (A, B, C, D)
+# Numeric Scores Below (aligned under main grades A, B, C, D)
 st.markdown(
     """
-    <div style="display: flex; justify-content: center; align-items: center; margin-top: 20px; padding: 10px; border-top: 2px solid #CCC;">
+    <div style="display: flex; justify-content: center; align-items: center; gap: 10px; padding: 10px;">
     """,
     unsafe_allow_html=True,
 )
 
-# Align main numeric scores under the main letter grades
-main_grades = ["A", "B", "C", "D"]
-numeric_scores = [1, 2, 3, 4]
+# Numeric values aligned under the main letter grades
+main_numeric_scores = [1, 2, 3, 4]
 
-for numeric in numeric_scores:
+# Add numeric scores in one row
+for numeric in main_numeric_scores:
     st.markdown(
         f"""
-        <div style="width: 60px; text-align: center; font-size: 18px; font-weight: bold; margin: 0 10px;">
+        <div style="width: 60px; text-align: center; font-size: 18px; font-weight: bold; margin: 5px;">
             {numeric}
         </div>
         """,
