@@ -614,24 +614,24 @@ score_colors = {
     "D": "#F44336",         # Red
 }
 
-# Start the container for the letter grade boxes
+# Start the flex container for letter grades
 st.markdown(
     """
-    <div style="display: flex; justify-content: center; align-items: center; gap: 8px; padding: 10px;">
+    <div style="display: flex; justify-content: center; align-items: center; gap: 10px; padding: 20px;">
     """,
     unsafe_allow_html=True,
 )
 
-# Add all letter grade boxes in one horizontal row
+# Add each grade box with its corresponding color
 for letter, color in score_colors.items():
     st.markdown(
         f"""
-        <div style="width: 40px; height: 40px; background-color: {color}; color: white; font-weight: bold; font-size: 14px; border-radius: 5px; display: flex; justify-content: center; align-items: center; text-align: center;">
+        <div style="flex: 1; background-color: {color}; color: white; padding: 20px; border-radius: 5px; font-size: 24px; font-weight: bold; text-align: center;">
             {letter}
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-# Close the container
+# Close the flex container
 st.markdown("</div>", unsafe_allow_html=True)
