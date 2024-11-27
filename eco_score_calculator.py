@@ -639,9 +639,12 @@ for i, (letter, color) in enumerate(score_colors.items()):
         if letter in number_mapping:
             st.markdown(
                 f"""
-                <div style="font-size: 20px; text-align: center; margin-top: 5px; font-weight: bold;">
+                <div style="width: 50px; height: 50px; background-color: #e0e0e0; color: black; 
+                            padding: 10px; border-radius: 5px; font-size: 20px; font-weight: bold; 
+                            display: flex; justify-content: center; align-items: center; text-align: center; margin-top: 5px;">
                     {number_mapping[letter]}
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
+
