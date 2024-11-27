@@ -524,6 +524,8 @@ if st.button("Calculate Eco-Score"):
     st.markdown("<hr>", unsafe_allow_html=True)  # Separator
     for category, category_score in scores["categories"].items():
         category_letter_score = numeric_to_letter(category_score) if category_score is not None else "No score"
+        category_numeric_display = f"{category_score:.2f}" if category_score is not None else "N/A"
+
 
         # Category Scores
         st.markdown(
@@ -531,7 +533,7 @@ if st.button("Calculate Eco-Score"):
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #E0E0E0; border-radius: 5px; margin-bottom: 10px;">
                 <span style="font-size: 18px; font-weight: bold;">{category}</span>
                 <span style="background-color: #E0E0E0; color: black; padding: 10px; border-radius: 5px; font-size: 16px; font-weight: bold; text-align: center;">
-                    {category_score:.2f if category_score is not None else "N/A"}
+                    {category_numeric_display}
                 </span>
                 <span style="background-color: {get_score_color(category_letter_score)}; color: white; padding: 10px; border-radius: 5px; font-size: 16px; font-weight: bold; text-align: center;">
                     {category_letter_score}
