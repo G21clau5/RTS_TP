@@ -614,11 +614,10 @@ score_colors = {
     "D": "#F44336",         # Red
 }
 
-# Start container for grades and numbers
+# Start the container for the letter grade boxes
 st.markdown(
     """
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 10px;">
-        <div style="display: flex; justify-content: center; gap: 8px;">
+    <div style="display: flex; justify-content: center; align-items: center; gap: 8px; padding: 10px;">
     """,
     unsafe_allow_html=True,
 )
@@ -627,37 +626,12 @@ st.markdown(
 for letter, color in score_colors.items():
     st.markdown(
         f"""
-        <div style="width: 40px; height: 40px; background-color: {color}; color: white; font-weight: bold; font-size: 14px; border-radius: 5px; display: flex; justify-content: center; align-items: center; text-align: center; margin: 5px;">
+        <div style="width: 40px; height: 40px; background-color: {color}; color: white; font-weight: bold; font-size: 14px; border-radius: 5px; display: flex; justify-content: center; align-items: center; text-align: center;">
             {letter}
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-# Close row for letter grades
+# Close the container
 st.markdown("</div>", unsafe_allow_html=True)
-
-# Numeric Scores Below (aligned under main grades A, B, C, D)
-st.markdown(
-    """
-    <div style="display: flex; justify-content: center; gap: 8px;">
-    """,
-    unsafe_allow_html=True,
-)
-
-# Numeric values aligned under the main letter grades
-main_numeric_scores = [1, 2, 3, 4]
-
-# Add numeric scores in one row
-for numeric in main_numeric_scores:
-    st.markdown(
-        f"""
-        <div style="width: 40px; text-align: center; font-size: 16px; font-weight: bold;">
-            {numeric}
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-# Close container for grades and numbers
-st.markdown("</div></div>", unsafe_allow_html=True)
