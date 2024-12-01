@@ -287,17 +287,17 @@ eco_data = {
                 "Costume purchase": "C",
                 "Indirect emissions, measured externally": None,
             },
-        },
-        "Laundry drying": {
-            "Source": {
-                "Tumble dryer": "D",
-                "Clothesline": "A",
+            "Laundry drying": {
+                "Source": {
+                    "Tumble dryer": "D",
+                    "Clothesline": "A",
+                },
             },
-        },
-        "Laundry detergent": {
-            "Source": {
-                "Conventional": "D",
-                "Organic": "A",
+            "Laundry detergent": {
+                "Source": {
+                    "Conventional": "D",
+                    "Organic": "A",
+                },
             },
         },
         "Waste": {
