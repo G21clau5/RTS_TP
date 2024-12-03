@@ -294,17 +294,17 @@ eco_data = {
             "Laundry detergent": {
                     "Conventional": "D",
                     "Organic": "A",
-                },
             },
         },
-        "Waste": {
-            "Source": {
-                "Residual waste (for incineration, kg)": "D",
-                "Residual waste (for incineration, bags)": "D",
-                "Indirect emissions, measured externally": None,
-            },
+    },
+    "Waste": {
+        "Source": {
+            "Residual waste (for incineration, kg)": "D",
+            "Residual waste (for incineration, bags)": "D",
+            "Indirect emissions, measured externally": None,
         },
-    }
+    },
+}
 
 # Map letter scores to numeric values
 score_map = {"A": 1, "B": 2, "C": 3, "D": 4}
