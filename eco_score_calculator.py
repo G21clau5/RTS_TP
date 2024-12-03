@@ -299,9 +299,11 @@ eco_data = {
     },
     "Waste": {
         "Source": {
+            "Source": {
             "Residual waste (for incineration, kg)": "D",
             "Residual waste (for incineration, bags)": "D",
             "Indirect emissions, measured externally": None,
+            }
         },
     },
 }
