@@ -136,7 +136,7 @@ eco_data = {
                 "Liquid gas": "D",
                 "Heating oil": "D",
                 "Lignite": "D",
-                "Coking coal": "D",
+                "Cooking coal": "D",
                 "Wood general": "B",
                 "Wood pellets": "B",
                 "Wood chips": "B",
@@ -288,13 +288,10 @@ eco_data = {
                 "Indirect emissions, measured externally": None,
             },
             "Laundry drying": {
-                "Source": {
                     "Tumble dryer": "D",
                     "Clothesline": "A",
-                },
             },
             "Laundry detergent": {
-                "Source": {
                     "Conventional": "D",
                     "Organic": "A",
                 },
@@ -307,8 +304,7 @@ eco_data = {
                 "Indirect emissions, measured externally": None,
             },
         },
-    },
-}
+    }
 
 # Map letter scores to numeric values
 score_map = {"A": 1, "B": 2, "C": 3, "D": 4}
