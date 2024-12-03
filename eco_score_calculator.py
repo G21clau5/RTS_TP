@@ -296,14 +296,12 @@ eco_data = {
                     "Organic": "A",
             },
         },
-    },
-    "Waste": {
-        "Source": {
+        "Waste": {
             "Source": {
-            "Residual waste (for incineration, kg)": "D",
-            "Residual waste (for incineration, bags)": "D",
-            "Indirect emissions, measured externally": None,
-            }
+                "Residual waste (for incineration, kg)": "D",
+                "Residual waste (for incineration, bags)": "D",
+                "Indirect emissions, measured externally": None,
+            },
         },
     },
 }
